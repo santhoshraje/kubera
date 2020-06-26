@@ -16,30 +16,9 @@ class Share:
         self.name = self.__name()
         self.price = self.__price()
         # dividend information
-        self.payout_amount = 0
-        self.payout_date = 0
-
-    def __market_cap(self):
-        try:
-            tmp = millify(float(self.data['marketCap'].to_string(index=False)))
-        except KeyError as e:
-            print(str(e) + 'key not available')
-            tmp = None
-
-        if not tmp:
-            return 'not available'
-        return tmp
-
-    def __book_value(self):
-        try:
-            tmp = self.data['bookValue'].to_string(index=False)
-        except KeyError as e:
-            print(str(e) + 'key not available')
-            tmp = None
-
-        if not tmp:
-            return 'not available'
-        return tmp
+        self.payout_amount = 'not available'
+        self.payout_date = 'not available'
+        self.yield_data = 'not available'
 
     # mode 1 = return string
     # mode 2 = return float
@@ -67,10 +46,12 @@ class Share:
         df.columns = df.columns.str.replace(' ', '')
         self.payout_amount = str(df.loc[df.Ticker == self.ticker_raw, 'Amount'].values[0])
         self.payout_date = str(df.loc[df.Ticker == self.ticker_raw, 'NextDividend'].values[0])
+        self.yield_data = str(df.loc[df.Ticker == self.ticker_raw, 'Yield'].values[0])
 
     def __str__(self):
-        return 'Name: ' + self.name + ' (' + self.ticker_raw + ')\nLatest price: SGD ' + str(
-            self.price) + '\nMarket Cap: ' + str(self.market_cap) + '\n'
+        return 'Name:' + self.name + ' (' + self.ticker_raw + ')\nLatest price: SGD' + str(
+            self.price) + '\nMarket Cap: ' + str(self.market_cap) + '\nBook Value Per Share (MRQ): SGD' + self.book_value \
+               + '\nPayout Amount: ' + self.payout_amount + '\nPayout date: ' + self.payout_date + '\n'
 
     def __data(self):
         try:
@@ -106,23 +87,24 @@ class Share:
             return 'not available'
         return tmp
 
+    def __market_cap(self):
+        try:
+            tmp = millify(float(self.data['marketCap'].to_string(index=False)))
+        except KeyError as e:
+            print(str(e) + 'key not available')
+            tmp = None
 
-def main():
-    url = "https://www.dividends.sg/dividend/coming"
-    html = requests.get(url).text
-    df = pd.read_html(html)[0]
+        if not tmp:
+            return 'not available'
+        return tmp
 
-    tickers = df['Ticker'].tolist()
+    def __book_value(self):
+        try:
+            tmp = self.data['bookValue'].to_string(index=False)
+        except KeyError as e:
+            print(str(e) + 'key not available')
+            tmp = None
 
-    for ticker in tickers:
-        share = Share(ticker)
-        share.get_upcoming_dividends()
-        print(share.name)
-        print(share.price)
-        print(share.market_cap)
-        print(share.book_value)
-        print(share.payout_amount)
-        print(share.payout_date)
-
-
-# main()
+        if not tmp:
+            return 'not available'
+        return tmp
