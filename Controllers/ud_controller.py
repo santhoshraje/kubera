@@ -3,10 +3,7 @@ import Controllers.states as states
 from telegram.ext import ConversationHandler
 from telegram.ext import CallbackQueryHandler
 
-import requests
-import pandas as pd
-
-from Kubera.share import Share
+import pickle
 
 
 class UDController:
@@ -26,30 +23,62 @@ class UDController:
 
     @staticmethod
     def get_upcoming_dividends(update, context):
-        message = ''
         query = update.callback_query
         query.answer()
         query.edit_message_text(text='Fetching data. Please wait.')
 
-        url = "https://www.dividends.sg/dividend/coming"
-        html = requests.get(url).text
-        df = pd.read_html(html)[0]
+        f = open("Logs/upcoming1.pickle", "rb")
+        array_1 = pickle.load(f)
+        f.close()
 
-        tickers = df['Ticker'].tolist()
+        f = open("Logs/upcoming2.pickle", "rb")
+        array_2 = pickle.load(f)
+        f.close()
 
-        for ticker in tickers:
-            try:
-                x = Share(ticker)
-            except AttributeError as e:
-                print(ticker + 'has no yahoo data' + str(e))
-                continue
+        f = open("Logs/upcoming3.pickle", "rb")
+        array_3 = pickle.load(f)
+        f.close()
 
-            x.get_upcoming_dividends()
-            message += '<b>' + x.name + ' (' + x.ticker_raw + ')</b>\nMarket Cap: ' + \
-                       x.market_cap + '\nBook Value: ' + x.book_value + '\nLatest price: ' + x.price + \
-                       '\nPayout amount: ' + x.payout_amount + '\nPayout date: ' + x.payout_date + '\n\n'
-            context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=message, parse_mode='html',
-                                     silent=True)
-            message = ''
+        f = open("Logs/upcoming4.pickle", "rb")
+        array_4 = pickle.load(f)
+        f.close()
 
+        f = open("Logs/upcoming5.pickle", "rb")
+        array_5 = pickle.load(f)
+        f.close()
+
+        tmp = ''
+        for a in array_1:
+            tmp += '<b>' + a.name + ' (' + a.ticker_raw + ')</b>\nMarket Cap: ' + a.market_cap \
+                    + '\nBook Value Per Share (MRQ): ' + a.book_value + '\nPrice: ' + a.price + \
+                    '\nAmount: ' + str(a.payout_amount) + '\nYield: ' + a.yield_data + '\nDate: ' + a.payout_date + '\n\n'
+        context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
+
+        tmp = ''
+        for b in array_2:
+            tmp += '<b>' + b.name + ' (' + b.ticker_raw + ')</b>\nMarket Cap: ' + b.market_cap \
+                    + '\nBook Value Per Share (MRQ): ' + b.book_value + '\nPrice: ' + b.price + \
+                    '\nAmount: ' + str(b.payout_amount) + '\nYield: ' + b.yield_data + '\nDate: ' + b.payout_date + '\n\n'
+        context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
+
+        tmp = ''
+        for c in array_3:
+            tmp += '<b>' + c.name + ' (' + c.ticker_raw + ')</b>\nMarket Cap: ' + c.market_cap \
+                    + '\nBook Value Per Share (MRQ): ' + c.book_value + '\nPrice: ' + c.price + \
+                    '\nAmount: ' + str(c.payout_amount) + '\nYield: ' + c.yield_data + '\nDate: ' + c.payout_date + '\n\n'
+        context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
+
+        tmp = ''
+        for d in array_4:
+            tmp += '<b>' + d.name + ' (' + d.ticker_raw + ')</b>\nMarket Cap: ' + d.market_cap \
+                    + '\nBook Value Per Share (MRQ): ' + d.book_value + '\nPrice: ' + d.price + \
+                    '\nAmount: ' + str(d.payout_amount) + '\nYield: ' + d.yield_data + '\nDate: ' + d.payout_date + '\n\n'
+        context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
+
+        tmp = ''
+        for e in array_5:
+            tmp += '<b>' + e.name + ' (' + e.ticker_raw + ')</b>\nMarket Cap: ' + e.market_cap \
+                    + '\nBook Value Per Share (MRQ): ' + e.book_value + '\nPrice: ' + e.price + \
+                    '\nAmount: ' + str(e.payout_amount) + '\nYield: ' + e.yield_data + '\nDate: ' + e.payout_date + '\n\n'
+        context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
         return ConversationHandler.END
