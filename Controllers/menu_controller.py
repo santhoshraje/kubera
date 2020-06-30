@@ -14,7 +14,7 @@ class MenuController:
         self.__handler()
         self.__cancel_handler()
         self.__user_count = 0
-        self.__menu_text = "<b>Kubera [v1.0]</b>\nKubera is a trading assistant that is designed to make your " \
+        self.__menu_text = "<b>Kubera [v1.0.1]</b>\nKubera is a trading assistant that is designed to make your " \
                            "life easier. Only SGX securities are supported. \n\n<b>Features:</b>\n\n<b>Upcoming " \
                            "Dividends</b>\nDividend payouts that are coming ""soon.\n\n<b>Dividend Summary</b>" \
                            "\nDividends paid by a company over the last 5 years.\n\n<b>Dividend " \
