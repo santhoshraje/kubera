@@ -22,14 +22,12 @@ pip install -r requirements.txt
 
 ### Usage
 
-#### Script
-
-run the script:
+start the bot:
 
 ```
 python main.py
 ```
-script will run until you stop it with CTRL + C / CMD + C
+bot will run until you stop it with CTRL + C / CMD + C
 
 ## Deployment
 
