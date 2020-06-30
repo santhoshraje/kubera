@@ -28,7 +28,7 @@ class MenuController:
 
     def __show_menu(self, update, context):
         user = update.message.from_user
-        log().info("User %s started the conversation.", user.first_name)
+        log().info("User %s started the conversation.", user.id)
 
         keyboard = [
             [InlineKeyboardButton("🔸Upcoming Dividends",
