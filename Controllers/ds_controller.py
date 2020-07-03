@@ -7,6 +7,8 @@ from Kubera.share import Share
 
 import Controllers.states as states
 
+from Utils.logging import get_logger as log
+
 GETSUMMARY = range(1)
 
 
@@ -29,6 +31,8 @@ class DSController:
         self.__dp.add_handler(ds_handler)
 
     def get_ticker(self, update, context):
+        user = update.effective_user
+        log().info("User %s pressed the dividend summary button.", user.id)
         query = update.callback_query
         query.answer()
         query.edit_message_text(
@@ -37,10 +41,14 @@ class DSController:
 
     def get_dividend_summary(self, update, context):
         ticker = update.message.text
+        user = update.effective_user
+        log().info("User %s entered ticker value %s.", user.id, ticker)
         try:
             share = Share(ticker)
         except AttributeError:
             update.message.reply_text("Invalid ticker. Please use /start to go back to the main menu")
+            log().info("User %s entered and invalid ticker value %s.", user.id, ticker)
+
             return ConversationHandler.END
         year_1 = share.get_total_dividend_payout(2019, 1)
         year_2 = share.get_total_dividend_payout(2018, 1)

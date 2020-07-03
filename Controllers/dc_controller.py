@@ -10,8 +10,10 @@ import Controllers.states as states
 
 from Kubera.share import Share
 
+from Utils.logging import get_logger as log
 
-class DCController():
+
+class DCController:
     def __init__(self, dispatcher):
         self.__dp = dispatcher
         self.__handler()
@@ -49,6 +51,8 @@ class DCController():
 
     @staticmethod
     def show_options(update, context):
+        user = update.effective_user
+        log().info("User %s pressed the dividend calculator button.", user.id)
         # answer query
         query = update.callback_query
         query.answer()
@@ -69,6 +73,8 @@ class DCController():
 
     def calculate_by_amt_first(self, update, context):
         self.stock_name = update.message.text
+        user = update.effective_user
+        log().info("User %s entered ticker value %s", user.id, self.stock_name)
         try:
             share = Share(self.stock_name)
         except AttributeError:
@@ -79,6 +85,8 @@ class DCController():
 
     def calculate_by_shares_first(self, update, context):
         self.stock_name = update.message.text
+        user = update.effective_user
+        log().info("User %s entered ticker value %s", user.id, self.stock_name)
         try:
             share = Share(self.stock_name)
         except AttributeError:
@@ -89,6 +97,8 @@ class DCController():
 
     def calculate_by_amt_second(self, update, context):
         self.amount = update.message.text
+        user = update.effective_user
+        log().info("User %s entered amount %s", user.id, self.amount)
         share = Share(self.stock_name)
         tmp = int(int(self.amount) / float(share.price) / 100)
         no_of_shares = tmp * 100
@@ -99,6 +109,8 @@ class DCController():
 
     def calculate_by_shares_second(self, update, context):
         self.amount = update.message.text
+        user = update.effective_user
+        log().info("User %s entered amount %s", user.id, self.amount)
         share = Share(self.stock_name)
         dividends = share.get_total_dividend_payout(2019, 2) * int(self.amount)
         update.message.reply_text("Expected dividends based on last year's data: SGD " + str(
@@ -107,6 +119,8 @@ class DCController():
 
     @staticmethod
     def get_ticker_amt(update, context):
+        user = update.effective_user
+        log().info("User %s wants to calculate using amount.", user.id)
         query = update.callback_query
         query.answer()
         query.edit_message_text(
@@ -115,6 +129,8 @@ class DCController():
 
     @staticmethod
     def get_ticker_shares(update, context):
+        user = update.effective_user
+        log().info("User %s wants to calculate using shares.", user.id)
         query = update.callback_query
         query.answer()
         query.edit_message_text(
