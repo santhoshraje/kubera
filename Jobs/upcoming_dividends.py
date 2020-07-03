@@ -8,7 +8,6 @@ import telegram.ext
 
 
 def get_upcoming_dividends(context: telegram.ext.CallbackContext):
-    log().info('Fetching upcoming dividends')
     array = []
     url = "https://www.dividends.sg/dividend/coming"
     html = requests.get(url).text
@@ -32,4 +31,4 @@ def get_upcoming_dividends(context: telegram.ext.CallbackContext):
         f.close()
         file_count += 1
 
-    log().info('Task completed')
+    log().info('updated upcoming dividends')
