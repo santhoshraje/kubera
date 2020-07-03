@@ -7,16 +7,17 @@ import Controllers.states as states
 
 from Utils.logging import get_logger as log
 
+from config import BotConfig
+
 
 class MenuController:
     def __init__(self, dispatcher):
         self.__dp = dispatcher
         self.__handler()
         self.__cancel_handler()
-        self.__user_count = 0
-        self.__menu_text = "<b>Kubera [v1.0.1]</b>\nKubera is a trading assistant that is designed to make your " \
+        self.__menu_text = "<b>Kubera [v" + BotConfig().version + "]</b>\nKubera is a trading assistant that is designed to make your " \
                            "life easier. Only SGX securities are supported. \n\n<b>Features:</b>\n\n<b>Upcoming " \
-                           "Dividends</b>\nDividend payouts that are coming ""soon.\n\n<b>Dividend Summary</b>" \
+                           "Dividends</b>\nDividend payouts that are coming soon.\n\n<b>Dividend Summary</b>" \
                            "\nDividends paid by a company over the last 5 years.\n\n<b>Dividend " \
                            "Calculator</b>\nCalculate your dividend payout.\n\n<b>Data" \
                            "sources</b>:\ndividends.sg\nYahoo Finance\n\n Use /cancel to exit the menu."
@@ -27,8 +28,12 @@ class MenuController:
         self.__dp.add_handler(menu_handler)
 
     def __show_menu(self, update, context):
-        user = update.message.from_user
+        user = update.effective_user
         log().info("User %s started the conversation.", user.id)
+        # store user id in file
+        with open("users.txt", "a") as file:
+            file.write('\n')
+            file.write(str(user.id))
 
         keyboard = [
             [InlineKeyboardButton("🔸Upcoming Dividends",
@@ -47,6 +52,6 @@ class MenuController:
         self.__dp.add_handler(cancel_handler)
 
     def __end_chat(self, update, context):
-        user = update.message.from_user
-        log().info("User %s ended the conversation.", user.first_name)
+        user = update.effective_user
+        log().info("User %s ended the conversation.", user.id)
         self.__menu.edit_text('Chat ended. Use /start to show the menu again.')
