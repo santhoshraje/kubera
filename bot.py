@@ -7,14 +7,17 @@ from Controllers.dc_controller import DCController
 from Controllers.ds_controller import DSController
 from Controllers.ud_controller import UDController
 #jobs
-from Kubera.tools import get_upcoming_dividends
+from Jobs.upcoming_dividends import get_upcoming_dividends
+#config
+from config import BotConfig
 
 
 class Bot:
     def __init__(self):
-        log().info('Kubera v1.0 active')
+        self.config = BotConfig()
+        log().info('kubera version ' + self.config.version + ' active')
         # loaded from config
-        self.token = ''
+        self.token = self.config.token
         # telegram api
         self.updater = Updater(self.token, use_context=True)
         # job queue
@@ -29,7 +32,7 @@ class Bot:
         DSController(self.dp)
         UDController(self.dp)
         # add jobs
-        self.job_queue.run_repeating(get_upcoming_dividends, interval=1800, first=0)
+        self.job_queue.run_repeating(get_upcoming_dividends, interval=3600, first=0)
         # start bot
         self.updater.start_polling()
         self.updater.idle()
