@@ -5,6 +5,8 @@ from telegram.ext import CallbackQueryHandler
 
 import pickle
 
+from Utils.logging import get_logger as log
+
 
 class UDController:
     def __init__(self, dispatcher):
@@ -23,9 +25,11 @@ class UDController:
 
     @staticmethod
     def get_upcoming_dividends(update, context):
+        user = update.effective_user
+        log().info("User %s pressed the upcoming dividends button.", user.id)
         query = update.callback_query
         query.answer()
-        query.edit_message_text(text='Fetching data. Please wait.')
+        query.edit_message_text(text='Generating data...')
 
         f = open("Logs/upcoming1.pickle", "rb")
         array_1 = pickle.load(f)
@@ -49,36 +53,37 @@ class UDController:
 
         tmp = ''
         for a in array_1:
-            tmp += '<b>' + a.name + ' (' + a.ticker_raw + ')</b>\nMarket Cap: ' + a.market_cap \
-                    + '\nBook Value Per Share (MRQ): ' + a.book_value + '\nPrice: ' + a.price + \
+            tmp += '<b>' + a.name.lstrip() + ' (' + a.ticker_raw + ')</b>\nMarket Cap: ' + a.market_cap \
+                    + '\nBVPS (MRQ): ' + a.book_value + '\nPrice: ' + a.price + \
                     '\nAmount: ' + str(a.payout_amount) + '\nYield: ' + a.yield_data + '\nDate: ' + a.payout_date + '\n\n'
         context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
 
         tmp = ''
         for b in array_2:
-            tmp += '<b>' + b.name + ' (' + b.ticker_raw + ')</b>\nMarket Cap: ' + b.market_cap \
-                    + '\nBook Value Per Share (MRQ): ' + b.book_value + '\nPrice: ' + b.price + \
+            tmp += '<b>' + b.name.lstrip() + ' (' + b.ticker_raw + ')</b>\nMarket Cap: ' + b.market_cap \
+                    + '\nBVPS (MRQ): ' + b.book_value + '\nPrice: ' + b.price + \
                     '\nAmount: ' + str(b.payout_amount) + '\nYield: ' + b.yield_data + '\nDate: ' + b.payout_date + '\n\n'
         context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
 
         tmp = ''
         for c in array_3:
-            tmp += '<b>' + c.name + ' (' + c.ticker_raw + ')</b>\nMarket Cap: ' + c.market_cap \
-                    + '\nBook Value Per Share (MRQ): ' + c.book_value + '\nPrice: ' + c.price + \
+            tmp += '<b>' + c.name.lstrip() + ' (' + c.ticker_raw + ')</b>\nMarket Cap: ' + c.market_cap \
+                    + '\nBVPS (MRQ): ' + c.book_value + '\nPrice: ' + c.price + \
                     '\nAmount: ' + str(c.payout_amount) + '\nYield: ' + c.yield_data + '\nDate: ' + c.payout_date + '\n\n'
         context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
 
         tmp = ''
         for d in array_4:
-            tmp += '<b>' + d.name + ' (' + d.ticker_raw + ')</b>\nMarket Cap: ' + d.market_cap \
-                    + '\nBook Value Per Share (MRQ): ' + d.book_value + '\nPrice: ' + d.price + \
+            tmp += '<b>' + d.name.lstrip() + ' (' + d.ticker_raw + ')</b>\nMarket Cap: ' + d.market_cap \
+                    + '\nBVPS (MRQ): ' + d.book_value + '\nPrice: ' + d.price + \
                     '\nAmount: ' + str(d.payout_amount) + '\nYield: ' + d.yield_data + '\nDate: ' + d.payout_date + '\n\n'
         context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
 
         tmp = ''
         for e in array_5:
-            tmp += '<b>' + e.name + ' (' + e.ticker_raw + ')</b>\nMarket Cap: ' + e.market_cap \
-                    + '\nBook Value Per Share (MRQ): ' + e.book_value + '\nPrice: ' + e.price + \
+            tmp += '<b>' + e.name.lstrip() + ' (' + e.ticker_raw + ')</b>\nMarket Cap: ' + e.market_cap \
+                    + '\nBVPS (MRQ): ' + e.book_value + '\nPrice: ' + e.price + \
                     '\nAmount: ' + str(e.payout_amount) + '\nYield: ' + e.yield_data + '\nDate: ' + e.payout_date + '\n\n'
         context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
+
         return ConversationHandler.END
