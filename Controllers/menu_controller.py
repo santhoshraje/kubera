@@ -31,7 +31,7 @@ class MenuController:
         user = update.effective_user
         log().info("User %s started the conversation.", user.id)
         # store user id in file
-        with open("users.txt", "a") as file:
+        with open("users.txt", "a+") as file:
             file.write('\n')
             file.write(str(user.id))
 
