@@ -47,22 +47,21 @@ class Share:
         df.columns = df.columns.str.replace(' ', '')
         # get data from page
         self.payout_amount = str(df.loc[df.Ticker == self.ticker_raw, 'Amount'].values[0])
-        # date = datetime.strptime(str(df.loc[df.Ticker == self.ticker_raw, 'NextDividend'].values[0]), '%Y-%m-%d')
-        # self.payout_date = date.strftime('%d %B %Y')
         d = pd.to_datetime(str(df.loc[df.Ticker == self.ticker_raw, 'NextDividend'].values[0]))
         self.payout_date = d.strftime('%d %B %Y')
         self.yield_data = str(df.loc[df.Ticker == self.ticker_raw, 'Yield'].values[0])
 
     def __str__(self):
         return 'Name:' + self.name + ' (' + self.ticker_raw + ')\nLatest price: SGD' + str(
-            self.price) + '\nMarket Cap: ' + str(self.market_cap) + '\nBook Value Per Share (MRQ): SGD' + self.book_value \
+            self.price) + '\nMarket Cap: ' + str(
+            self.market_cap) + '\nBook Value Per Share (MRQ): SGD' + self.book_value \
                + '\nPayout Amount: ' + self.payout_amount + '\nPayout date: ' + self.payout_date + '\n Yield: ' + self.yield_data + '\n'
 
     def __data(self):
         try:
             tmp = data.get_quote_yahoo(self.ticker)
         except IndexError:
-            log().warning('ticker data not available for %s', self.ticker)
+            # log().warning('ticker data not available for %s', self.ticker)
             tmp = None
 
         if tmp.empty:
@@ -107,9 +106,10 @@ class Share:
         try:
             tmp = self.data['bookValue'].to_string(index=False)
         except KeyError:
-            log().warning('book value data not available for %s', self.ticker)
+            # log().warning('book value data not available for %s', self.ticker)
             tmp = None
 
         if not tmp:
             return 'unavailable'
         return tmp
+
