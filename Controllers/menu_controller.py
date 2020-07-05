@@ -19,7 +19,7 @@ class MenuController:
                            "life easier. Only SGX securities are supported. \n\n<b>Features:</b>\n\n<b>Upcoming " \
                            "Dividends</b>\nDividend payouts that are coming soon.\n\n<b>Dividend Summary</b>" \
                            "\nDividends paid by a company over the last 5 years.\n\n<b>Dividend " \
-                           "Calculator</b>\nCalculate your dividend payout.\n\n<b>Data" \
+                           "Calculator</b>\nCalculate your dividend payout.\n\n<b>Data " \
                            "sources</b>:\ndividends.sg\nYahoo Finance\n\n Use /cancel to exit the menu."
         self.__menu = None
 
@@ -29,11 +29,21 @@ class MenuController:
 
     def __show_menu(self, update, context):
         user = update.effective_user
-        log().info("User %s started the conversation.", user.id)
-        # store user id in file
-        with open("users.txt", "a+") as file:
-            file.write('\n')
-            file.write(str(user.id))
+
+        log().info("User %s started the conversation.", user.first_name)
+
+        user_id = str(user.id)
+
+        file = open("users.txt", "a+")
+        file.seek(0)  # set position to start of file
+        lines = file.read().splitlines()  # now we won't have those newlines
+
+        if user_id in lines:
+            log().info('user id already exists in file')
+        else:
+            # write to file
+            log().info('user id stored in file')
+            file.write("\n" + user_id)
 
         keyboard = [
             [InlineKeyboardButton("🔸Upcoming Dividends",
