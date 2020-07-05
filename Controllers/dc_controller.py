@@ -80,6 +80,11 @@ class DCController:
         except AttributeError:
             update.message.reply_text("Invalid ticker. Please use /start to go back to the main menu")
             return ConversationHandler.END
+        dividend_check = share.get_total_dividend_payout(2019, 2)
+        if dividend_check is None:
+            update.message.reply_text("2019 dividend data is not available for this company. Please use /start to go "
+                                      "back to the main menu")
+            return ConversationHandler.END
         update.message.reply_text("Enter purchase amount in SGD")
         return states.DIVIDENDCALCAMTSTATEFINAL
 
@@ -91,6 +96,11 @@ class DCController:
             share = Share(self.stock_name)
         except AttributeError:
             update.message.reply_text("Invalid ticker. Please use /start to go back to the main menu")
+            return ConversationHandler.END
+        dividend_check = share.get_total_dividend_payout(2019, 2)
+        if dividend_check is None:
+            update.message.reply_text("2019 dividend data is not available for this company. Please use /start to go "
+                                      "back to the main menu")
             return ConversationHandler.END
         update.message.reply_text("Enter number of shares")
         return states.DIVIDENDCALCSHARESSTATEFINAL
