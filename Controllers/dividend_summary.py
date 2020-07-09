@@ -5,7 +5,7 @@ from telegram.ext import CallbackQueryHandler
 
 from Kubera.share import Share
 
-import Controllers.states as states
+import Controllers.global_states as states
 
 from Utils.logging import get_logger as log
 

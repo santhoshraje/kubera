@@ -6,7 +6,7 @@ from telegram.ext import CallbackQueryHandler
 from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 
-import Controllers.states as states
+import Controllers.global_states as states
 
 from Kubera.share import Share
 
