@@ -1,4 +1,4 @@
-import Controllers.states as states
+import Controllers.global_states as states
 
 from telegram.ext import ConversationHandler
 from telegram.ext import CallbackQueryHandler
