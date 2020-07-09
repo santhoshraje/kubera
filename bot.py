@@ -2,12 +2,14 @@ from telegram.ext import Updater
 
 from Utils.logging import get_logger as log
 
-from Controllers.menu_controller import MenuController
-from Controllers.dc_controller import DCController
-from Controllers.ds_controller import DSController
-from Controllers.ud_controller import UDController
+from Controllers.main_menu import MenuController
+from Controllers.dividend_calculator import DCController
+from Controllers.dividend_summary import DSController
+from Controllers.upcoming_dividends import UDController
+from Controllers.feedback_button import FeedbackButton
+from Controllers.cancel_button import CancelButton
 #jobs
-from Jobs.upcoming_dividends import get_upcoming_dividends
+from Jobs.get_upcoming_dividends import get_upcoming_dividends
 #config
 from config import BotConfig
 
@@ -31,6 +33,8 @@ class Bot:
         DCController(self.dp)
         DSController(self.dp)
         UDController(self.dp)
+        FeedbackButton(self.dp)
+        CancelButton(self.dp)
         # add jobs
         self.job_queue.run_repeating(get_upcoming_dividends, interval=3600, first=0)
         # start bot
@@ -39,4 +43,4 @@ class Bot:
 
     @staticmethod
     def error(update, context):
-        log().warning('Update "%s" caused error "%s"', update, context.error)
+        log().warning('"%s"', context.error)
