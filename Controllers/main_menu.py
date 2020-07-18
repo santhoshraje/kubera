@@ -12,7 +12,7 @@ from Utils.check_user import does_user_exist as check
 from config import BotConfig
 
 
-class MenuController:
+class MainMenu:
     def __init__(self, dispatcher):
         self.__dp = dispatcher
         self.__handler()
