@@ -2,7 +2,6 @@ import pandas as pd
 import requests
 from Kubera.share import Share
 import pickle
-from Utils.logging import get_logger as log
 import numpy as np
 import telegram.ext
 
@@ -30,5 +29,3 @@ def get_upcoming_dividends(context: telegram.ext.CallbackContext):
         pickle.dump(x, f)
         f.close()
         file_count += 1
-
-    log().info('updated upcoming dividends')
