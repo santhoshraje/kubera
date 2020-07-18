@@ -8,7 +8,7 @@ import pickle
 from Utils.logging import get_logger as log
 
 
-class UDController:
+class UpcomingDividends:
     def __init__(self, dispatcher):
         self.__dp = dispatcher
         self.__handler()
@@ -26,7 +26,7 @@ class UDController:
     @staticmethod
     def get_upcoming_dividends(update, context):
         user = update.effective_user
-        log().info("User %s pressed the upcoming dividends button.", user.id)
+        log().info("User %s pressed the upcoming dividends button.", user.first_name)
         query = update.callback_query
         query.answer()
         query.edit_message_text(text='Generating data...')

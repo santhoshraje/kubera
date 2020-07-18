@@ -38,7 +38,7 @@ class FeedbackButton:
     def __store_feedback(self, update, context):
         feedback = update.message.text
         user = update.effective_user
-        log().info("User %s entered feedback: %s", user.id, feedback)
+        log().info("User %s entered feedback: %s", user.first_name, feedback)
         update.message.reply_text("Your feedback has been recorded. Thank you!\nUse /start to go back to the main menu")
         return ConversationHandler.END
 
