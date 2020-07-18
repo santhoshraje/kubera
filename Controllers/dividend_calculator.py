@@ -12,8 +12,11 @@ from Kubera.share import Share
 
 from Utils.logging import get_logger as log
 
+DIVIDENDCALCAMT, DIVIDENDCALCSHARES, DIVIDENDCALCFIRST, DIVIDENDCALCAMTSTATE, \
+DIVIDENDCALCSHARESSTATE, DIVIDENDCALCAMTSTATEFINAL, DIVIDENDCALCSHARESSTATEFINAL = range(7)
 
-class DCController:
+
+class DividendCalculator:
     def __init__(self, dispatcher):
         self.__dp = dispatcher
         self.__handler()
@@ -24,23 +27,23 @@ class DCController:
         dc_handler = ConversationHandler(
             entry_points=[CallbackQueryHandler(self.show_options, pattern='^' + str(states.DIVIDENDCALC) + '$')],
             states={
-                states.DIVIDENDCALCFIRST: [
-                    CallbackQueryHandler(self.get_ticker_amt, pattern='^' + str(states.DIVIDENDCALCAMT) + '$'),
-                    CallbackQueryHandler(self.get_ticker_shares, pattern='^' + str(states.DIVIDENDCALCSHARES) + '$')
+                DIVIDENDCALCFIRST: [
+                    CallbackQueryHandler(self.get_ticker_amt, pattern='^' + str(DIVIDENDCALCAMT) + '$'),
+                    CallbackQueryHandler(self.get_ticker_shares, pattern='^' + str(DIVIDENDCALCSHARES) + '$')
                 ],
-                states.DIVIDENDCALCAMTSTATE: [
+                DIVIDENDCALCAMTSTATE: [
                     # message handler
                     MessageHandler(Filters.text, self.calculate_by_amt_first)
                 ],
-                states.DIVIDENDCALCSHARESSTATE: [
+                DIVIDENDCALCSHARESSTATE: [
                     # message handler
                     MessageHandler(Filters.text, self.calculate_by_shares_first)
                 ],
-                states.DIVIDENDCALCAMTSTATEFINAL: [
+                DIVIDENDCALCAMTSTATEFINAL: [
                     # message handler
                     MessageHandler(Filters.text, self.calculate_by_amt_second)
                 ],
-                states.DIVIDENDCALCSHARESSTATEFINAL: [
+                DIVIDENDCALCSHARESSTATEFINAL: [
                     # message handler
                     MessageHandler(Filters.text, self.calculate_by_shares_second)
                 ],
@@ -52,16 +55,16 @@ class DCController:
     @staticmethod
     def show_options(update, context):
         user = update.effective_user
-        log().info("User %s pressed the dividend calculator button.", user.id)
+        log().info("User %s pressed the dividend calculator button.", user.first_name)
         # answer query
         query = update.callback_query
         query.answer()
         # new keyboard
         keyboard = [
-            [InlineKeyboardButton("🔵 Calculate by amount",
-                                  callback_data=str(states.DIVIDENDCALCAMT))],
-            [InlineKeyboardButton("⚪ Calculate by shares",
-                                  callback_data=str(states.DIVIDENDCALCSHARES))]
+            [InlineKeyboardButton("🔸 Calculate by amount",
+                                  callback_data=str(DIVIDENDCALCAMT))],
+            [InlineKeyboardButton("🔸 Calculate by shares",
+                                  callback_data=str(DIVIDENDCALCSHARES))]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         query.edit_message_text(
@@ -69,12 +72,12 @@ class DCController:
                  "paid for the shares",
             reply_markup=reply_markup
         )
-        return states.DIVIDENDCALCFIRST
+        return DIVIDENDCALCFIRST
 
     def calculate_by_amt_first(self, update, context):
         self.stock_name = update.message.text
         user = update.effective_user
-        log().info("User %s entered ticker value %s", user.id, self.stock_name)
+        log().info("User %s entered ticker value %s", user.first_name, self.stock_name)
         try:
             share = Share(self.stock_name)
         except AttributeError:
@@ -86,12 +89,12 @@ class DCController:
                                       "back to the main menu")
             return ConversationHandler.END
         update.message.reply_text("Enter purchase amount in SGD")
-        return states.DIVIDENDCALCAMTSTATEFINAL
+        return DIVIDENDCALCAMTSTATEFINAL
 
     def calculate_by_shares_first(self, update, context):
         self.stock_name = update.message.text
         user = update.effective_user
-        log().info("User %s entered ticker value %s", user.id, self.stock_name)
+        log().info("User %s entered ticker value %s", user.first_name, self.stock_name)
         try:
             share = Share(self.stock_name)
         except AttributeError:
@@ -103,12 +106,12 @@ class DCController:
                                       "back to the main menu")
             return ConversationHandler.END
         update.message.reply_text("Enter number of shares")
-        return states.DIVIDENDCALCSHARESSTATEFINAL
+        return DIVIDENDCALCSHARESSTATEFINAL
 
     def calculate_by_amt_second(self, update, context):
         self.amount = update.message.text
         user = update.effective_user
-        log().info("User %s entered amount %s", user.id, self.amount)
+        log().info("User %s entered amount %s", user.first_name, self.amount)
         share = Share(self.stock_name)
         tmp = int(int(self.amount) / float(share.price) / 100)
         no_of_shares = tmp * 100
@@ -120,7 +123,7 @@ class DCController:
     def calculate_by_shares_second(self, update, context):
         self.amount = update.message.text
         user = update.effective_user
-        log().info("User %s entered amount %s", user.id, self.amount)
+        log().info("User %s entered amount %s", user.first_name, self.amount)
         share = Share(self.stock_name)
         dividends = share.get_total_dividend_payout(2019, 2) * int(self.amount)
         update.message.reply_text("Expected dividends based on last year's data: SGD " + str(
@@ -130,19 +133,19 @@ class DCController:
     @staticmethod
     def get_ticker_amt(update, context):
         user = update.effective_user
-        log().info("User %s wants to calculate using amount.", user.id)
+        log().info("User %s wants to calculate using amount.", user.first_name)
         query = update.callback_query
         query.answer()
         query.edit_message_text(
             text="Enter ticker symbol (e.g D05)")
-        return states.DIVIDENDCALCAMTSTATE
+        return DIVIDENDCALCAMTSTATE
 
     @staticmethod
     def get_ticker_shares(update, context):
         user = update.effective_user
-        log().info("User %s wants to calculate using shares.", user.id)
+        log().info("User %s wants to calculate using shares.", user.first_name)
         query = update.callback_query
         query.answer()
         query.edit_message_text(
             text="Enter ticker symbol (e.g D05)")
-        return states.DIVIDENDCALCSHARESSTATE
+        return DIVIDENDCALCSHARESSTATE
