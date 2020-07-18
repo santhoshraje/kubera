@@ -2,10 +2,10 @@ from telegram.ext import Updater
 
 from Utils.logging import get_logger as log
 
-from Controllers.main_menu import MenuController
-from Controllers.dividend_calculator import DCController
-from Controllers.dividend_summary import DSController
-from Controllers.upcoming_dividends import UDController
+from Controllers.main_menu import MainMenu
+from Controllers.dividend_calculator import DividendCalculator
+from Controllers.dividend_summary import DividendSummary
+from Controllers.upcoming_dividends import UpcomingDividends
 from Controllers.feedback_button import FeedbackButton
 from Controllers.cancel_button import CancelButton
 #jobs
@@ -29,10 +29,10 @@ class Bot:
         # error handling
         self.dp.add_error_handler(self.error)
         # add controllers
-        MenuController(self.dp)
-        DCController(self.dp)
-        DSController(self.dp)
-        UDController(self.dp)
+        MainMenu(self.dp)
+        DividendCalculator(self.dp)
+        DividendSummary(self.dp)
+        UpcomingDividends(self.dp)
         FeedbackButton(self.dp)
         CancelButton(self.dp)
         # add jobs
