@@ -78,46 +78,60 @@ class DividendCalculator:
         self.stock_name = update.message.text
         user = update.effective_user
         log().info("User %s entered ticker value %s", user.first_name, self.stock_name)
-        try:
-            share = Share(self.stock_name)
-        except AttributeError:
+        share = Share(self.stock_name)
+        if not share.is_valid:
             update.message.reply_text("Invalid ticker. Please use /start to go back to the main menu")
             return ConversationHandler.END
-        dividend_check = share.get_total_dividend_payout(2019, 2)
+
+        dividend_check = share.get_dividend_summary(2019)
+
         if dividend_check is None:
-            update.message.reply_text("2019 dividend data is not available for this company. Please use /start to go "
+            update.message.reply_text("Sorry, dividend data is unavailable for this company. Please use /start to go "
                                       "back to the main menu")
             return ConversationHandler.END
+
         update.message.reply_text("Enter purchase amount in SGD")
+
         return DIVIDENDCALCAMTSTATEFINAL
 
     def calculate_by_shares_first(self, update, context):
         self.stock_name = update.message.text
         user = update.effective_user
         log().info("User %s entered ticker value %s", user.first_name, self.stock_name)
-        try:
-            share = Share(self.stock_name)
-        except AttributeError:
+        share = Share(self.stock_name)
+
+        if not share.is_valid:
             update.message.reply_text("Invalid ticker. Please use /start to go back to the main menu")
             return ConversationHandler.END
-        dividend_check = share.get_total_dividend_payout(2019, 2)
+
+        dividend_check = share.get_dividend_summary(2019)
         if dividend_check is None:
-            update.message.reply_text("2019 dividend data is not available for this company. Please use /start to go "
+            update.message.reply_text("Sorry, dividend data is unavailable for this company. Please use /start to go "
                                       "back to the main menu")
+
             return ConversationHandler.END
+
         update.message.reply_text("Enter number of shares")
+
         return DIVIDENDCALCSHARESSTATEFINAL
 
     def calculate_by_amt_second(self, update, context):
         self.amount = update.message.text
         user = update.effective_user
         log().info("User %s entered amount %s", user.first_name, self.amount)
+
         share = Share(self.stock_name)
+        # get 2019 dividends
+        dividends = float(share.get_dividend_summary(2019).total.replace('SGD', ''))
+        # get number of shares from amount
         tmp = int(int(self.amount) / float(share.price) / 100)
         no_of_shares = tmp * 100
-        dividends = share.get_total_dividend_payout(2019, 2) * no_of_shares
+        # calculate returns
+        returns = no_of_shares * dividends
+
         update.message.reply_text("Expected dividends based on last year's data: SGD " + str(
-            dividends) + "\n\n Use /start to go back to main menu")
+            returns) + "\n\n Use /start to go back to main menu")
+
         return ConversationHandler.END
 
     def calculate_by_shares_second(self, update, context):
@@ -125,9 +139,12 @@ class DividendCalculator:
         user = update.effective_user
         log().info("User %s entered amount %s", user.first_name, self.amount)
         share = Share(self.stock_name)
-        dividends = share.get_total_dividend_payout(2019, 2) * int(self.amount)
+
+        dividends = float(share.get_dividend_summary(2019).total.replace('SGD', '')) * int(self.amount)
+
         update.message.reply_text("Expected dividends based on last year's data: SGD " + str(
             dividends) + "\n\n Use /start to go back to main menu")
+
         return ConversationHandler.END
 
     @staticmethod
