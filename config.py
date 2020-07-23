@@ -13,7 +13,7 @@ config.read(file)
 class BotConfig:
     def __init__(self):
         self.token = ''
-        self.version = '1.0.3'
+        self.version = '1.1'
         self.dividend_url = 'https://www.dividends.sg/view/'
         self.upcoming_dividends_url = 'https://www.dividends.sg/dividend/coming'
         self.admin_id = ''
