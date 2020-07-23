@@ -4,10 +4,10 @@ from telegram.ext import Filters
 from telegram.ext import CallbackQueryHandler
 
 from Kubera.share import Share
-
 import Controllers.global_states as states
-
 from Utils.logging import get_logger as log
+import pandas as pd
+import datetime
 
 GETSUMMARY = range(1)
 
@@ -30,7 +30,8 @@ class DividendSummary:
         )
         self.__dp.add_handler(ds_handler)
 
-    def get_ticker(self, update, context):
+    @staticmethod
+    def get_ticker(update, context):
         user = update.effective_user
         log().info("User %s pressed the dividend summary button.", user.first_name)
         query = update.callback_query
@@ -39,25 +40,31 @@ class DividendSummary:
             text="Enter ticker symbol (e.g D05)")
         return GETSUMMARY
 
-    def get_dividend_summary(self, update, context):
+    @staticmethod
+    def get_dividend_summary(update, context):
         ticker = update.message.text
         user = update.effective_user
         log().info("User %s entered ticker value %s.", user.first_name, ticker)
-        try:
-            share = Share(ticker)
-        except AttributeError:
+
+        years = 5
+
+        share = Share(ticker)
+
+        if not share.is_valid:
             update.message.reply_text("Invalid ticker. Please use /start to go back to the main menu")
-            log().info("User %s entered and invalid ticker value %s.", user.first_name, ticker)
-
+            log().info("User %s entered an invalid ticker value %s.", user.first_name, ticker)
             return ConversationHandler.END
-        year_1 = share.get_total_dividend_payout(2019, 1)
-        year_2 = share.get_total_dividend_payout(2018, 1)
-        year_3 = share.get_total_dividend_payout(2017, 1)
-        year_4 = share.get_total_dividend_payout(2016, 1)
-        year_5 = share.get_total_dividend_payout(2015, 1)
 
-        update.message.reply_text('<b>' + share.name + '</b>\n\n<b>2019</b>: ' + str(year_1) + '\n\n<b>2018</b>: ' +
-                                  str(year_2) + '\n\n<b>2017</b>: ' + str(year_3) + '\n\n<b>2016</b>: ' + str(year_4) +
-                                  '\n\n<b>2015</b>: ' + str(year_5) + '\n\n use /start to go back to the main menu'
-                                  , parse_mode='HTML')
+        a = share.get_dividend_summary(datetime.datetime.now().year, datetime.datetime.now().year - years)
+        s = '<b>' + share.name + '</b>\n\n'
+
+        for item in a:
+            s += '<b>' + str(item.year) + ' (' + str(item.total) + ')</b>' + '\n'
+            i = 1
+            for pay_date, pay_amount in zip(item.pay_date, item.amount):
+                s += '‣ ' + pd.to_datetime(pay_date).strftime('%d %B') + ': ' + str(pay_amount).replace('SGD', 'SGD ') +'\n'
+                i += 1
+            s += '\n'
+
+        update.message.reply_text(s, parse_mode='HTML')
         return ConversationHandler.END
