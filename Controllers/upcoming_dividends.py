@@ -29,7 +29,7 @@ class UpcomingDividends:
         log().info("User %s pressed the upcoming dividends button.", user.first_name)
         query = update.callback_query
         query.answer()
-        query.edit_message_text(text='Generating data...')
+        # query.edit_message_text(text='Fetching data...')
 
         f = open("Logs/upcoming1.pickle", "rb")
         array_1 = pickle.load(f)
