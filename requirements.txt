@@ -1,8 +1,11 @@
+beautifulsoup4==4.9.1
+bs4==0.0.1
 certifi==2020.6.20
 cffi==1.14.0
 chardet==3.0.4
 cryptography==2.9.2
 decorator==4.4.2
+html5lib==1.1
 idna==2.10
 lxml==4.5.1
 millify==0.1.1
@@ -15,5 +18,7 @@ python-telegram-bot==12.8
 pytz==2020.1
 requests==2.24.0
 six==1.15.0
+soupsieve==2.0.1
 tornado==6.0.4
 urllib3==1.25.9
+webencodings==0.5.1
