@@ -10,6 +10,7 @@ from telegram.ext import MessageHandler
 
 GETFEEDBACK = range(1)
 
+
 class FeedbackButton:
     def __init__(self, dispatcher):
         self.__dp = dispatcher
@@ -17,7 +18,7 @@ class FeedbackButton:
 
     def __handler(self):
         cancel_handler = ConversationHandler(
-            entry_points=[CallbackQueryHandler(self.__show_message, pattern='^' + str(states.FEEDBACK) + '$')],
+            entry_points=[MessageHandler(Filters.regex('^Send feedback$'), self.__show_message)],
             states={
                 GETFEEDBACK: [
                     # message handler
@@ -30,9 +31,9 @@ class FeedbackButton:
 
     def __show_message(self, update, context):
         user = update.effective_user
-        query = update.callback_query
-        query.answer()
-        query.edit_message_text('Please enter your feedback')
+        # query = update.callback_query
+        # query.answer()
+        update.message.reply_text('Please enter your feedback')
         return GETFEEDBACK
 
     def __store_feedback(self, update, context):
@@ -41,4 +42,3 @@ class FeedbackButton:
         log().info("User %s entered feedback: %s", user.first_name, feedback)
         update.message.reply_text("Your feedback has been recorded. Thank you!\nUse /start to go back to the main menu")
         return ConversationHandler.END
-

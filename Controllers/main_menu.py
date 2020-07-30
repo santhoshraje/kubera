@@ -1,7 +1,7 @@
 from telegram.ext import CommandHandler
 
-from telegram import InlineKeyboardButton
-from telegram import InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, KeyboardButton
+from telegram import ReplyKeyboardMarkup
 
 import Controllers.global_states as states
 
@@ -16,16 +16,7 @@ class MainMenu:
     def __init__(self, dispatcher):
         self.__dp = dispatcher
         self.__handler()
-        self.__menu_text = "<b>Kubera [v" + BotConfig().version + "]</b>\nKubera is a trading assistant that is " \
-                                                                  "designed to make your life easier.\n\n<b>Supported " \
-                                                                  "Exchanges</b>:\nSGX \n\n<b>Bot " \
-                                                                  "Features:</b>\nUpcoming Dividends\nDividend " \
-                                                                  "payouts that are coming soon.\n\nDividend " \
-                                                                  "Summary\nDividends paid by a company over the last " \
-                                                                  "5 years.\n\nDividend Calculator\nCalculate your " \
-                                                                  "dividend payout.\n\n<b>Data " \
-                                                                  "Sources</b>:\n<code>dividends.sg</code>\nYahoo " \
-                                                                  "Finance "
+        self.__menu_text = ''
 
     # handlers
     def __handler(self):
@@ -42,18 +33,17 @@ class MainMenu:
             log().info("New user %s started the conversation.", user.first_name)
 
         keyboard = [
-            [InlineKeyboardButton("🔸Upcoming Dividends",
-                                  callback_data=str(states.DIVIDENDUP))],
-            [InlineKeyboardButton("🔸Dividend Summary",
-                                  callback_data=str(states.DIVIDENDINFO))],
-            [InlineKeyboardButton("🔸Dividend Calculator",
-                                  callback_data=str(states.DIVIDENDCALC))],
-            [InlineKeyboardButton("❗️Send Feedback",
-                                  callback_data=str(states.FEEDBACK))],
-            [InlineKeyboardButton("❌Cancel",
-                                  callback_data=str(states.MENUCANCEL))]
+            # [KeyboardButton("Show me upcoming dividend payouts", callback_data=str(states.DIVIDENDUP))],
+            [KeyboardButton("Show me a summary of dividends paid")],
+            [KeyboardButton("Calculate my expected dividends")],
+            [KeyboardButton("Send feedback")],
+            [KeyboardButton("Cancel")]
         ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
+        reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
         # Send message with text and appended InlineKeyboard
-        update.message.reply_text(self.__menu_text, reply_markup=reply_markup, parse_mode='HTML')
-        # context.bot.send_message(chat_id=, text='hello world')
+        update.message.reply_text("Hello " + user.first_name + ". I am Kubera, a robot trading assistant. I am "
+                                                               "designed to help you be a better trader. You will "
+                                                               "automatically receive trading tips as they become "
+                                                               "available.\n\nHow can I help you today?", parse_mode='HTML', reply_markup = reply_markup)
+
+        context.bot.send_message(chat_id=BotConfig().admin_id, text='hello world')

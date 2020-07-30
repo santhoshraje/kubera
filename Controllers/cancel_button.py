@@ -1,4 +1,4 @@
-from telegram.ext import ConversationHandler
+from telegram.ext import ConversationHandler, MessageHandler, Filters
 from telegram.ext import CallbackQueryHandler
 
 import Controllers.global_states as states
@@ -13,7 +13,7 @@ class CancelButton:
 
     def __handler(self):
         cancel_handler = ConversationHandler(
-            entry_points=[CallbackQueryHandler(self.__end_chat, pattern='^' + str(states.MENUCANCEL) + '$')],
+            entry_points=[MessageHandler(Filters.regex('^Cancel$'), self.__end_chat)],
             states={},
             fallbacks=[]
         )
@@ -22,9 +22,9 @@ class CancelButton:
     @staticmethod
     def __end_chat(update, context):
         user = update.effective_user
-        query = update.callback_query
-        query.answer()
+        # query = update.callback_query
+        # query.answer()
         log().info("User %s ended the conversation.", user.first_name)
-        query.edit_message_text('Chat ended. Use /start to show the menu again.')
+        update.message.reply_text('Chat ended. Use /start to show the menu again.')
         return ConversationHandler.END
 

@@ -19,8 +19,7 @@ class DividendSummary:
 
     def __handler(self):
         ds_handler = ConversationHandler(
-            entry_points=[CallbackQueryHandler(
-                self.get_ticker, pattern='^' + str(states.DIVIDENDINFO) + '$')],
+            entry_points=[MessageHandler(Filters.regex('^Show me a summary of dividends paid$'), self.get_ticker)],
             states={
                 GETSUMMARY: [
                     MessageHandler(Filters.text, self.get_dividend_summary)
@@ -34,10 +33,11 @@ class DividendSummary:
     def get_ticker(update, context):
         user = update.effective_user
         log().info("User %s pressed the dividend summary button.", user.first_name)
-        query = update.callback_query
-        query.answer()
-        query.edit_message_text(
-            text="Enter ticker symbol (e.g D05)")
+        update.message.reply_text('Enter ticker symbol (e.g D05)')
+        # query = update.callback_query
+        # query.answer()
+        # query.edit_message_text(
+        #     text="Enter ticker symbol (e.g D05)")
         return GETSUMMARY
 
     @staticmethod

@@ -25,7 +25,7 @@ class DividendCalculator:
 
     def __handler(self):
         dc_handler = ConversationHandler(
-            entry_points=[CallbackQueryHandler(self.show_options, pattern='^' + str(states.DIVIDENDCALC) + '$')],
+            entry_points=[MessageHandler(Filters.regex('^Calculate my expected dividends$'), self.show_options)],
             states={
                 DIVIDENDCALCFIRST: [
                     CallbackQueryHandler(self.get_ticker_amt, pattern='^' + str(DIVIDENDCALCAMT) + '$'),
@@ -57,8 +57,8 @@ class DividendCalculator:
         user = update.effective_user
         log().info("User %s pressed the dividend calculator button.", user.first_name)
         # answer query
-        query = update.callback_query
-        query.answer()
+        # query = update.callback_query
+        # query.answer()
         # new keyboard
         keyboard = [
             [InlineKeyboardButton("🔸 Calculate by amount",
@@ -67,7 +67,7 @@ class DividendCalculator:
                                   callback_data=str(DIVIDENDCALCSHARES))]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        query.edit_message_text(
+        update.message.reply_text(
             text="You can calculate expected dividends by entering either the number of shares bought or the amount "
                  "paid for the shares",
             reply_markup=reply_markup

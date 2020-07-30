@@ -2,7 +2,7 @@ import time
 
 import Controllers.global_states as states
 
-from telegram.ext import ConversationHandler
+from telegram.ext import ConversationHandler, MessageHandler, Filters
 from telegram.ext import CallbackQueryHandler
 
 import pickle
@@ -17,8 +17,7 @@ class UpcomingDividends:
 
     def __handler(self):
         ud_handler = ConversationHandler(
-            entry_points=[CallbackQueryHandler(
-                self.get_upcoming_dividends, pattern='^' + str(states.DIVIDENDUP) + '$')],
+            entry_points=[MessageHandler(Filters.regex('^Show me upcoming dividend payouts$'),self.get_upcoming_dividends)],
             states={
             },
             fallbacks=[]
@@ -29,8 +28,8 @@ class UpcomingDividends:
     def get_upcoming_dividends(update, context):
         user = update.effective_user
         log().info("User %s pressed the upcoming dividends button.", user.first_name)
-        query = update.callback_query
-        query.answer()
+        # query = update.callback_query
+        # query.answer()
         # query.edit_message_text(text='Fetching data...')
 
         f = open("Logs/upcoming1.pickle", "rb")
