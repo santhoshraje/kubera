@@ -11,8 +11,11 @@ config.read(file)
 
 
 class BotConfig:
-    def __init__(self):
-        self.token = config.get('main', 'api_key')
+    def __init__(self, dev=False):
+        if dev:
+            self.token = config.get('main', 'dev_api_key')
+        else:
+            self.token = config.get('main', 'prod_api_key')
         self.version = '1.1'
         self.dividend_url = 'https://www.dividends.sg/view/'
         self.upcoming_dividends_url = 'https://www.dividends.sg/dividend/coming'
