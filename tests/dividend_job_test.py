@@ -3,11 +3,11 @@ import requests
 from Kubera.share import Share
 import pickle
 import numpy as np
-import telegram.ext
+
 from config import BotConfig
 
 
-def get_upcoming_dividends(context: telegram.ext.CallbackContext):
+def main():
     array = []
     url = BotConfig().upcoming_dividends_url
     html = requests.get(url).text
@@ -18,6 +18,7 @@ def get_upcoming_dividends(context: telegram.ext.CallbackContext):
 
     for ticker in tickers:
         share = Share(ticker)
+        print(share.name)
         if not share.is_valid:
             continue
         share.payout_amount = str(df.loc[df.Ticker == ticker, 'Amount'].values[0])
@@ -30,7 +31,10 @@ def get_upcoming_dividends(context: telegram.ext.CallbackContext):
     file_count = 1
 
     for x in tmp:
-        f = open("Logs/upcoming" + str(file_count) + ".pickle", 'wb')
+        f = open("upcoming" + str(file_count) + ".pickle", 'wb')
         pickle.dump(x, f)
         f.close()
         file_count += 1
+
+
+main()
