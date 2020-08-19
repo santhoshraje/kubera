@@ -16,7 +16,7 @@ class BotConfig:
             self.token = config.get('main', 'dev_api_key')
         else:
             self.token = config.get('main', 'prod_api_key')
-        self.version = '1.1'
+        self.version = '1.11'
         self.dividend_url = 'https://www.dividends.sg/view/'
         self.upcoming_dividends_url = 'https://www.dividends.sg/dividend/coming'
         self.admin_id = config.get('main', 'admin_id')
