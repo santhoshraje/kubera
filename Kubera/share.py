@@ -120,5 +120,4 @@ class Share:
     def __str__(self):
         return 'Name:' + self.name + ' (' + self.ticker_raw + ')\nLatest price: SGD' + str(
             self.price) + '\nMarket Cap: ' + str(
-            self.market_cap) + '\nBook Value Per Share (MRQ): SGD' + self.book_value \
-               + '\nPayout Amount: ' + self.payout_amount + '\nPayout date: ' + self.payout_date + '\n Yield: ' + self.yield_data + '\n'
+            self.market_cap) + '\nBook Value Per Share (MRQ): SGD' + self.book_value 
