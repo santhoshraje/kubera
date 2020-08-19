@@ -16,7 +16,8 @@ from config import BotConfig
 
 class Bot:
     def __init__(self):
-        self.config = BotConfig(dev=True)
+        # do some db stuff here
+        self.config = BotConfig()
         log().info('kubera version ' + self.config.version + ' active')
         # loaded from config
         self.token = self.config.token
