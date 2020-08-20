@@ -2,13 +2,14 @@ import sqlite3
 from Utils.logging import get_logger as log
 
 
-class DBHelper:
+class DBEngine:
     def __init__(self, dbname="kubera.sqlite"):
         self.dbname = dbname
         try:
             log().info('connecting to local database')
             self.conn = sqlite3.connect(dbname)
             log().info(sqlite3.version)
+            log().info('connected to local database')
         except sqlite3.Error as e:
             log().critical('local database initialisation error: "%s"', e)
 
@@ -20,8 +21,11 @@ class DBHelper:
     def add_item(self, item):
         stmt = "INSERT INTO users (id) VALUES (?)"
         args = (item,)
-        self.conn.execute(stmt, args)
-        self.conn.commit()
+        try:
+            self.conn.execute(stmt, args)
+            self.conn.commit()
+        except sqlite3.IntegrityError as e:
+            log().critical('user id ' + str(item) + ' already exists in database')
 
     def delete_item(self, item):
         stmt = "DELETE FROM users WHERE id = (?)"
