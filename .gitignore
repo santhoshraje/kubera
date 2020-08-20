@@ -171,3 +171,5 @@ tests/upcoming4.pickle
 tests/upcoming5.pickle
 
 users copy.txt
+
+dev_config.ini
