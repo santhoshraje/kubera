@@ -1,3 +1,5 @@
+import time
+
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters
 
 from config import BotConfig
@@ -32,6 +34,7 @@ class SendUpdate:
         # send to users
         for user in DBEngine().get_items():
             context.bot.send_message(chat_id=user, text=self.__message, parse_mode='HTML')
+            time.sleep(1)
         # send message
         update.message.reply_text('Update sent to all users')
         return ConversationHandler.END
