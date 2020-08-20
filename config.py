@@ -20,3 +20,4 @@ class BotConfig:
         self.dividend_url = 'https://www.dividends.sg/view/'
         self.upcoming_dividends_url = 'https://www.dividends.sg/dividend/coming'
         self.admin_id = config.get('main', 'admin_id')
+        self.admin_password = config.get('main', 'admin_password')
