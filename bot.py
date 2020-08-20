@@ -20,11 +20,15 @@ from db_engine import DBEngine
 
 class Bot:
     def __init__(self):
-        self.config = BotConfig()
+        self.config = BotConfig(dev=True)
         log().info('kubera version ' + self.config.version + ' active')
         # db engine
         db = DBEngine()
         db.setup()
+        #import users from text file
+        with open("users.txt", "r") as myfile:
+            for line in myfile:
+                db.add_item(line)
         # loaded from config
         self.token = self.config.token
         # telegram api
