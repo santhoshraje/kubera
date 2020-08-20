@@ -155,19 +155,3 @@ users.txt
 debug_users.txt
 
 .DS_Store
-
-tests/test.sqlite
-
-tests/upcoming1.pickle
-
-tests/upcoming2.pickle
-
-tests/upcoming3.pickle
-
-tests/upcoming4.pickle
-
-tests/upcoming5.pickle
-
-users copy.txt
-
-kubera.sqlite
