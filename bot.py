@@ -12,13 +12,17 @@ from Controllers.cancel_button import CancelButton
 from Jobs.get_upcoming_dividends import get_upcoming_dividends
 #config
 from config import BotConfig
+#db
+from db_engine import DBEngine
 
 
 class Bot:
     def __init__(self):
-        # do some db stuff here
         self.config = BotConfig()
         log().info('kubera version ' + self.config.version + ' active')
+        # db engine
+        db = DBEngine()
+        db.setup()
         # loaded from config
         self.token = self.config.token
         # telegram api
