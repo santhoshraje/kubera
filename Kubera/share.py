@@ -69,13 +69,11 @@ class Share:
     def __data(self):
         try:
             return data.get_quote_yahoo(self.ticker)
-        except IndexError as e:
+        except IndexError:
             self.is_valid = False
-            print('Index Error: ' + str(e))
             return None
-        except KeyError as e:
+        except KeyError:
             self.is_valid = False
-            print('Key Error: ' + str(e))
             return None
 
     def __name(self):
