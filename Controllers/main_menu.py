@@ -10,6 +10,7 @@ from Utils.logging import get_logger as log
 from Utils.check_user import does_user_exist as check
 # configuration
 from config import BotConfig
+from db_engine import DBEngine
 
 
 class MainMenu:
@@ -35,11 +36,12 @@ class MainMenu:
     # functions
     def __show_menu(self, update, context):
         user = update.effective_user
-
-        if check(str(user.id)):
-            log().info("Existing user %s started the conversation.", user.first_name)
-        else:
-            log().info("New user %s started the conversation.", user.first_name)
+        log().info("User %s started the conversation.", user.first_name)
+        DBEngine().add_item(user.id)
+        # if check(str(user.id)):
+        #     log().info("Existing user %s started the conversation.", user.first_name)
+        # else:
+        #     log().info("User %s started the conversation.", user.first_name)
 
         keyboard = [
             [InlineKeyboardButton("🔸Upcoming Dividends",
