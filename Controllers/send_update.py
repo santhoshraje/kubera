@@ -44,7 +44,7 @@ class SendUpdate:
             except TelegramError as e:
                 log().warning(e)
                 log().warning('User %s has blocked the bot', user)
-                DBEngine().delete_item()
+                DBEngine().delete_item(user)
                 log().info('User %s has been removed from the database', user)
                 continue
 
