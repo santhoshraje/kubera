@@ -36,7 +36,7 @@ class MainMenu:
     # functions
     def __show_menu(self, update, context):
         user = update.effective_user
-        log().info("User %s started the conversation.", user.first_name)
+        log().info("User %s [id: %s] started the conversation.", user.first_name, user.id)
         DBEngine().add_item(user.id)
         # if check(str(user.id)):
         #     log().info("Existing user %s started the conversation.", user.first_name)
