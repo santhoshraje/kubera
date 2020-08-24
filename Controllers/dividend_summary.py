@@ -62,6 +62,8 @@ class DividendSummary:
             s += '<b>' + str(item.year) + ' (' + str(item.total) + ')</b>' + '\n'
             i = 1
             for pay_date, pay_amount in zip(item.pay_date, item.amount):
+                if pay_date is '-':
+                    continue
                 s += '‣ ' + pd.to_datetime(pay_date).strftime('%d %B') + ': ' + str(pay_amount).replace('SGD', 'SGD ') +'\n'
                 i += 1
             s += '\n'
