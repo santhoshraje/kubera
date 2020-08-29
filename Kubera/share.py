@@ -23,6 +23,8 @@ class Share:
         self.book_value = self.__book_value()
         self.name = self.__name()
         self.price = self.__price()
+        self.fifty_day_ma = self.__fiftydayma()
+        self.two_hundred_day_ma = self.__twohundereddayma()
         # # dividend information
         # self.payout_amount = 'unavailable'
         # self.payout_date = 'unavailable'
@@ -118,6 +120,28 @@ class Share:
             return self.data['bookValue'].to_string(index=False)
         except KeyError:
             # log().warning('book value data not available for %s', self.ticker)
+            return 'unavailable'
+
+    def __fiftydayma(self):
+        # if ticker data is unavailable
+        if not self.is_valid:
+            return 'unavailable'
+
+        try:
+            return self.data['fiftyDayAverage'].to_string(index=False)
+        except KeyError:
+            log().warning('price data not available for %s', self.ticker)
+            return 'unavailable'
+
+    def __twohundereddayma(self):
+        # if ticker data is unavailable
+        if not self.is_valid:
+            return 'unavailable'
+
+        try:
+            return self.data['twoHundredDayAverage'].to_string(index=False)
+        except KeyError:
+            log().warning('price data not available for %s', self.ticker)
             return 'unavailable'
 
     def __str__(self):
