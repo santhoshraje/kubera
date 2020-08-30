@@ -44,12 +44,14 @@ class MainMenu:
         #     log().info("User %s started the conversation.", user.first_name)
 
         keyboard = [
-            [InlineKeyboardButton("🔸Upcoming Dividends",
+            # [InlineKeyboardButton("🔸Upcoming Dividends",
+            #                       callback_data=str(states.DIVIDENDUP))],
+            [InlineKeyboardButton("🔸Stock Analysis",
                                   callback_data=str(states.DIVIDENDUP))],
-            [InlineKeyboardButton("🔸Dividend Summary",
+            [InlineKeyboardButton("🔸Dividend Report",
                                   callback_data=str(states.DIVIDENDINFO))],
-            [InlineKeyboardButton("🔸Dividend Calculator",
-                                  callback_data=str(states.DIVIDENDCALC))],
+            # [InlineKeyboardButton("🔸Dividend Calculator",
+            #                       callback_data=str(states.DIVIDENDCALC))],
             [InlineKeyboardButton("❗️Send Feedback",
                                   callback_data=str(states.FEEDBACK))],
             [InlineKeyboardButton("❌Cancel",
