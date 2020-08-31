@@ -20,11 +20,10 @@ class MainMenu:
         self.__menu_text = "<b>Kubera [v" + BotConfig().version + "]</b>\nKubera is a trading assistant that is " \
                                                                   "designed to make your life easier.\n\n<b>Supported " \
                                                                   "Exchanges</b>:\nSGX \n\n<b>Bot " \
-                                                                  "Features:</b>\nUpcoming Dividends\nDividend " \
-                                                                  "payouts that are coming soon.\n\nDividend " \
-                                                                  "Summary\nDividends paid by a company over the last " \
-                                                                  "5 years.\n\nDividend Calculator\nCalculate your " \
-                                                                  "dividend payout.\n\n<b>Data " \
+                                                                  "Features:</b>\nStock Analysis\nGenerates " \
+                                                                  "technical analysis report for a stock.\n\nDividend " \
+                                                                  "Report\nDividends paid by a company over the last " \
+                                                                  "5 years.\n\n<b>Data " \
                                                                   "Sources</b>:\n<code>dividends.sg</code>\nYahoo " \
                                                                   "Finance "
 
@@ -47,7 +46,7 @@ class MainMenu:
             # [InlineKeyboardButton("🔸Upcoming Dividends",
             #                       callback_data=str(states.DIVIDENDUP))],
             [InlineKeyboardButton("🔸Stock Analysis",
-                                  callback_data=str(states.DIVIDENDUP))],
+                                  callback_data=str(states.ANALYSIS))],
             [InlineKeyboardButton("🔸Dividend Report",
                                   callback_data=str(states.DIVIDENDINFO))],
             # [InlineKeyboardButton("🔸Dividend Calculator",
