@@ -28,7 +28,7 @@ class DBEngine:
                 self.conn.execute(stmt, args)
                 self.conn.commit()
             except sqlite3.IntegrityError as e:
-                log().critical('user id ' + str(item) + ' already exists in database')
+                log().info('user id ' + str(item) + ' already exists in database')
 
         def delete_item(self, item):
             stmt = "DELETE FROM users WHERE id = (?)"
