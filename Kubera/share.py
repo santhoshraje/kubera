@@ -95,7 +95,7 @@ class Share:
             return 'unavailable'
 
         try:
-            return self.data['price'].to_string(index=False)
+            return float(self.data['price'].to_string(index=False))
         except KeyError:
             log().warning('price data not available for %s', self.ticker)
             return 'unavailable'
@@ -128,9 +128,9 @@ class Share:
             return 'unavailable'
 
         try:
-            return self.data['fiftyDayAverage'].to_string(index=False)
+            return float("{:.2f}".format(float(self.data['fiftyDayAverage'].to_string(index=False))))
         except KeyError:
-            log().warning('price data not available for %s', self.ticker)
+            # log().warning('price data not available for %s', self.ticker)
             return 'unavailable'
 
     def __twohundereddayma(self):
@@ -139,9 +139,9 @@ class Share:
             return 'unavailable'
 
         try:
-            return self.data['twoHundredDayAverage'].to_string(index=False)
+            return float("{:.2f}".format(float(self.data['twoHundredDayAverage'].to_string(index=False))))
         except KeyError:
-            log().warning('price data not available for %s', self.ticker)
+            # log().warning('price data not available for %s', self.ticker)
             return 'unavailable'
 
     def __str__(self):

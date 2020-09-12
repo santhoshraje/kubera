@@ -50,32 +50,28 @@ class StockAnalysis:
             return ConversationHandler.END
 
         s = ''
-        s += '<b>'+ share.name + ' (' + share.ticker + ') Technical Analysis Report ' + str(datetime.now().date().strftime('%d %B %Y')) + '</b>' + '\n\n'
-        s += '<b>Indicators used</b>\n\n50 day Moving Average (50 MA): ' + share.fifty_day_ma + '\n'
-        s += '200 day Moving Average (200 MA): ' + share.two_hundred_day_ma + '\n'
+        s += '<b>' + share.name + ' (' + share.ticker + ') Technical Analysis Report (' + str(
+            datetime.now().date().strftime('%d %B %Y')) + ')</b>' + '\n\n'
+        s += '<b>Indicators</b>\n\n‣ 50 MA: ' + str(share.fifty_day_ma) + '\n'
+        s += '‣ 200 MA: ' + str(share.two_hundred_day_ma) + '\n'
         s += '\n<b>Possible trading strategies</b>\n\n'
         s += '<b>Golden Cross strategy</b>\n'
         if share.fifty_day_ma > share.two_hundred_day_ma:
-            s+= '50 Day MA is currently above 200 day MA'
+            s += '‣ 50 Day MA is currently above 200 day MA'
         else:
-            s+= '50 Day MA is currently below 200 day MA'
+            s += '‣ 50 Day MA is currently below 200 day MA'
 
         s += '\n\n<b>Price Crossover strategy</b>\n'
 
         if share.price > share.fifty_day_ma:
-            s+= 'Share price is currently above 50 day MA\n'
+            s += '‣ Share price is currently above 50 MA\n'
         else:
-            s+= 'Share price is currently below 50 day MA\n'
+            s += '‣ Share price is currently below 50 MA\n'
 
         if share.price > share.two_hundred_day_ma:
-            s+= 'Share price is currently above 200 day MA\n'
+            s += '‣ Share price is currently above 200 MA\n'
         else:
-            s+= 'Share price is currently below 200 day MA\n'
+            s += '‣ Share price is currently below 200 MA\n'
 
         update.message.reply_text(s, parse_mode='HTML')
         return ConversationHandler.END
-
-
-
-
-
