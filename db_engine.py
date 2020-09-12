@@ -1,3 +1,5 @@
+# singleton pattern
+
 import sqlite3
 from Utils.logging import get_logger as log
 
@@ -9,17 +11,20 @@ class DBEngine:
         def __init__(self, dbname):
             self.dbname = dbname
             try:
-                log().info('connecting to local database')
                 self.conn = sqlite3.connect(dbname)
-                log().info(sqlite3.version)
-                log().info('connected to local database')
             except sqlite3.Error as e:
                 log().critical('local database initialisation error: "%s"', e)
 
         def setup(self):
-            stmt = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY)"
+            stmt = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username text, first text, last text, " \
+                   "stocks text, persona text, actions text) "
             self.conn.execute(stmt)
             self.conn.commit()
+
+        # def alter(self):
+        #     stmt = "ALTER TABLE users ADD COLUMN first_name text"
+        #     self.conn.execute(stmt)
+        #     self.conn.commit()
 
         def add_item(self, item):
             stmt = "INSERT INTO users (id) VALUES (?)"
