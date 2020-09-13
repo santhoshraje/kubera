@@ -4,10 +4,8 @@ from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 
 import Controllers.global_states as states
-
 # utilities
 from Utils.logging import get_logger as log
-from Utils.check_user import does_user_exist as check
 # configuration
 from config import BotConfig
 from db_engine import DBEngine
@@ -38,10 +36,6 @@ class MainMenu:
         user = update.effective_user
         log().info("User %s [id: %s] started the conversation.", user.first_name, user.id)
         DBEngine().add_item(user.id)
-        # if check(str(user.id)):
-        #     log().info("Existing user %s started the conversation.", user.first_name)
-        # else:
-        #     log().info("User %s started the conversation.", user.first_name)
 
         keyboard = [
             [InlineKeyboardButton("🔸Upcoming Dividends",
