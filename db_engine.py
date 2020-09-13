@@ -22,14 +22,21 @@ class DBEngine:
             self.conn.commit()
 
         # create
-        def add_item(self, item):
-            stmt = "INSERT INTO users (id) VALUES (?)"
-            args = (item,)
-            try:
-                self.conn.execute(stmt, args)
-                self.conn.commit()
-            except sqlite3.IntegrityError as e:
-                log().info('user id ' + str(item) + ' already exists in database')
+        def add_item(self, values, columns):
+            # Check for single column insert
+            if isinstance(columns, str):
+                values, columns = (values,), (columns,)
+                
+            assert len(values) == len(columns), 'Mismatch between values and columns'
+
+            template = """INSERT INTO users ({}) VALUES ({})"""
+
+            cols = ','.join([f'"{col}"' for col in columns])
+            placeholders = ','.join(['?'] * len(values))
+            stmt = template.format(cols, placeholders)
+
+            self.conn.execute(stmt, values)
+            self.conn.commit()
 
         # read
         def get_items(self):
