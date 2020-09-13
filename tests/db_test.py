@@ -1,8 +1,8 @@
-import db_engine
+from db_engine import DBEngine
 
 
 def main():
-    db = db_engine.DBHelper('test.sqlite')
+    db = DBEngine('test.sqlite')
     db.setup()
     db.add_item(345)
     db.add_item(235)
