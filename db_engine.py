@@ -1,3 +1,5 @@
+# singleton pattern
+
 import sqlite3
 from Utils.logging import get_logger as log
 
@@ -9,18 +11,17 @@ class DBEngine:
         def __init__(self, dbname):
             self.dbname = dbname
             try:
-                log().info('connecting to local database')
                 self.conn = sqlite3.connect(dbname)
-                log().info(sqlite3.version)
-                log().info('connected to local database')
             except sqlite3.Error as e:
                 log().critical('local database initialisation error: "%s"', e)
 
         def setup(self):
-            stmt = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY)"
+            stmt = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username text, first text, last text, " \
+                   "stocks text, persona text, actions text) "
             self.conn.execute(stmt)
             self.conn.commit()
 
+        # create
         def add_item(self, item):
             stmt = "INSERT INTO users (id) VALUES (?)"
             args = (item,)
@@ -28,17 +29,21 @@ class DBEngine:
                 self.conn.execute(stmt, args)
                 self.conn.commit()
             except sqlite3.IntegrityError as e:
-                log().critical('user id ' + str(item) + ' already exists in database')
+                log().info('user id ' + str(item) + ' already exists in database')
 
+        # read
+        def get_items(self):
+            stmt = "SELECT id FROM users"
+            return [x[0] for x in self.conn.execute(stmt)]
+        # update
+
+
+        # delete
         def delete_item(self, item):
             stmt = "DELETE FROM users WHERE id = (?)"
             args = (item,)
             self.conn.execute(stmt, args)
             self.conn.commit()
-
-        def get_items(self):
-            stmt = "SELECT id FROM users"
-            return [x[0] for x in self.conn.execute(stmt)]
 
     def __init__(self, dbname="kubera.sqlite"):
         if not DBEngine.__instance:
