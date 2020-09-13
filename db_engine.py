@@ -9,10 +9,10 @@ class DBEngine:
         def __init__(self, dbname):
             self.dbname = dbname
             try:
-                log().info('connecting to local database')
+                # log().info('connecting to local database')
                 self.conn = sqlite3.connect(dbname)
-                log().info(sqlite3.version)
-                log().info('connected to local database')
+                # log().info(sqlite3.version)
+                # log().info('connected to local database')
             except sqlite3.Error as e:
                 log().critical('local database initialisation error: "%s"', e)
 
@@ -28,7 +28,7 @@ class DBEngine:
                 self.conn.execute(stmt, args)
                 self.conn.commit()
             except sqlite3.IntegrityError as e:
-                log().critical('user id ' + str(item) + ' already exists in database')
+                log().warning('user id ' + str(item) + ' already exists in database')
 
         def delete_item(self, item):
             stmt = "DELETE FROM users WHERE id = (?)"
