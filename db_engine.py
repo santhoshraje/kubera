@@ -26,7 +26,7 @@ class DBEngine:
             # Check for single column insert
             if isinstance(columns, str):
                 values, columns = (values,), (columns,)
-                
+
             assert len(values) == len(columns), 'Mismatch between values and columns'
 
             template = """INSERT INTO users ({}) VALUES ({})"""
@@ -39,15 +39,14 @@ class DBEngine:
             self.conn.commit()
 
         # read
-        def get_items(self):
-            stmt = "SELECT id FROM users"
-            return [x[0] for x in self.conn.execute(stmt)]
-        # update
-
+        def get_items(self, column):
+            rows = self.conn.execute("SELECT " + column + " FROM users").fetchall()
+            self.conn.commit()
+            return rows
 
         # delete
-        def delete_item(self, item):
-            stmt = "DELETE FROM users WHERE id = (?)"
+        def delete_item(self, column, item):
+            stmt = "DELETE FROM users WHERE " + column + " = (?)"
             args = (item,)
             self.conn.execute(stmt, args)
             self.conn.commit()
