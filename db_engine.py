@@ -17,30 +17,43 @@ class DBEngine:
 
         def setup(self):
             stmt = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username text, first text, last text, " \
-                   "stocks text, persona text, actions text) "
+                   "persona text) "
             self.conn.execute(stmt)
             self.conn.commit()
 
         # create
-        def add_item(self, item):
-            stmt = "INSERT INTO users (id) VALUES (?)"
-            args = (item,)
-            try:
-                self.conn.execute(stmt, args)
-                self.conn.commit()
-            except sqlite3.IntegrityError as e:
-                log().info('user id ' + str(item) + ' already exists in database')
+        def add_item(self, values, columns):
+            # Check for single column insert
+            if isinstance(columns, str):
+                values, columns = (values,), (columns,)
+
+            assert len(values) == len(columns), 'Mismatch between values and columns'
+
+            template = """INSERT INTO users ({}) VALUES ({})"""
+
+            cols = ','.join([f'"{col}"' for col in columns])
+            placeholders = ','.join(['?'] * len(values))
+            stmt = template.format(cols, placeholders)
+
+            self.conn.execute(stmt, values)
+            self.conn.commit()
 
         # read
-        def get_items(self):
-            stmt = "SELECT id FROM users"
-            return [x[0] for x in self.conn.execute(stmt)]
-        # update
+        def get_items(self, column):
+            rows = self.conn.execute("SELECT " + column + " FROM users").fetchall()
+            self.conn.commit()
+            return rows
 
+        # update
+        def update_item(self, first, second, third, fourth):
+            stmt = "UPDATE users SET " + first + " = ? WHERE " + third + " = ?"
+            args = (second, fourth,)
+            self.conn.execute(stmt, args)
+            self.conn.commit()
 
         # delete
-        def delete_item(self, item):
-            stmt = "DELETE FROM users WHERE id = (?)"
+        def delete_item(self, column, item):
+            stmt = "DELETE FROM users WHERE " + column + " = (?)"
             args = (item,)
             self.conn.execute(stmt, args)
             self.conn.commit()
