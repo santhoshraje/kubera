@@ -21,11 +21,7 @@ class DBEngine:
             self.conn.execute(stmt)
             self.conn.commit()
 
-        # def alter(self):
-        #     stmt = "ALTER TABLE users ADD COLUMN first_name text"
-        #     self.conn.execute(stmt)
-        #     self.conn.commit()
-
+        # create
         def add_item(self, item):
             stmt = "INSERT INTO users (id) VALUES (?)"
             args = (item,)
@@ -33,17 +29,21 @@ class DBEngine:
                 self.conn.execute(stmt, args)
                 self.conn.commit()
             except sqlite3.IntegrityError as e:
-                log().critical('user id ' + str(item) + ' already exists in database')
+                log().info('user id ' + str(item) + ' already exists in database')
 
+        # read
+        def get_items(self):
+            stmt = "SELECT id FROM users"
+            return [x[0] for x in self.conn.execute(stmt)]
+        # update
+
+
+        # delete
         def delete_item(self, item):
             stmt = "DELETE FROM users WHERE id = (?)"
             args = (item,)
             self.conn.execute(stmt, args)
             self.conn.commit()
-
-        def get_items(self):
-            stmt = "SELECT id FROM users"
-            return [x[0] for x in self.conn.execute(stmt)]
 
     def __init__(self, dbname="kubera.sqlite"):
         if not DBEngine.__instance:
