@@ -17,7 +17,7 @@ class DBEngine:
 
         def setup(self):
             stmt = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username text, first text, last text, " \
-                   "stocks text, persona text, actions text) "
+                   "persona text) "
             self.conn.execute(stmt)
             self.conn.commit()
 
@@ -43,6 +43,13 @@ class DBEngine:
             rows = self.conn.execute("SELECT " + column + " FROM users").fetchall()
             self.conn.commit()
             return rows
+
+        # update
+        def update_item(self, first, second, third, fourth):
+            stmt = "UPDATE users SET " + first + " = ? WHERE " + third + " = ?"
+            args = (second, fourth,)
+            self.conn.execute(stmt, args)
+            self.conn.commit()
 
         # delete
         def delete_item(self, column, item):
