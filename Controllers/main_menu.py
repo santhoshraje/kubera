@@ -17,16 +17,17 @@ class MainMenu:
     def __init__(self, dispatcher):
         self.__dp = dispatcher
         self.__handler()
-        self.__menu_text = "<b>Kubera [v" + BotConfig().version + "]</b>\nKubera is a trading assistant that is " \
-                                                                  "designed to make your life easier.\n\n<b>Supported " \
-                                                                  "Exchanges</b>:\nSGX \n\n<b>Bot " \
-                                                                  "Features:</b>\nUpcoming Dividends\nDividend " \
-                                                                  "payouts that are coming soon.\n\nDividend " \
-                                                                  "Summary\nDividends paid by a company over the last " \
-                                                                  "5 years.\n\nDividend Calculator\nCalculate your " \
-                                                                  "dividend payout.\n\n<b>Data " \
-                                                                  "Sources</b>:\n<code>dividends.sg</code>\nYahoo " \
-                                                                  "Finance "
+        # self.__menu_text = "<b>Kubera [v" + BotConfig().version + "]</b>\nKubera is a trading assistant that is " \
+        #                                                           "designed to make your life easier.\n\n<b>Supported " \
+        #                                                           "Exchanges</b>:\nSGX \n\n<b>Bot " \
+        #                                                           "Features:</b>\nUpcoming Dividends\nDividend " \
+        #                                                           "payouts that are coming soon.\n\nDividend " \
+        #                                                           "Summary\nDividends paid by a company over the last " \
+        #                                                           "5 years.\n\nDividend Calculator\nCalculate your " \
+        #                                                           "dividend payout.\n\n<b>Data " \
+        #                                                           "Sources</b>:\n<code>dividends.sg</code>\nYahoo " \
+        #                                                           "Finance "
+        # self.__menu_text = "Hi user, how can I help you today?\n\nKubera version "+ BotConfig().version +" © 2020 All Rights Reserved"
 
     # handlers
     def __handler(self):
@@ -42,14 +43,16 @@ class MainMenu:
         #     log().info("Existing user %s started the conversation.", user.first_name)
         # else:
         #     log().info("User %s started the conversation.", user.first_name)
+        menu_text = "Hello " + user.first_name + ", let's make some money. How can I help you today?\n\n<b>© 2020 All " \
+                                                 "Rights Reserved</b> "
 
         keyboard = [
             [InlineKeyboardButton("🔸Upcoming Dividends",
                                   callback_data=str(states.DIVIDENDUP))],
-            [InlineKeyboardButton("🔸Dividend Summary",
+            [InlineKeyboardButton("🔸Dividend Report",
                                   callback_data=str(states.DIVIDENDINFO))],
-            [InlineKeyboardButton("🔸Dividend Calculator",
-                                  callback_data=str(states.DIVIDENDCALC))],
+            # [InlineKeyboardButton("🔸Dividend Calculator",
+            #                       callback_data=str(states.DIVIDENDCALC))],
             [InlineKeyboardButton("❗️Send Feedback",
                                   callback_data=str(states.FEEDBACK))],
             [InlineKeyboardButton("❌Cancel",
@@ -57,5 +60,5 @@ class MainMenu:
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         # Send message with text and appended InlineKeyboard
-        update.message.reply_text(self.__menu_text, reply_markup=reply_markup, parse_mode='HTML')
+        update.message.reply_text(menu_text, reply_markup=reply_markup, parse_mode='HTML')
         # context.bot.send_message(chat_id=, text='hello world')
