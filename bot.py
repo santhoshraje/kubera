@@ -25,10 +25,10 @@ class Bot:
         # db engine
         db = DBEngine()
         db.setup()
-        #import users from text file
-        with open("users.txt", "r") as myfile:
-            for line in myfile:
-                db.add_item(line)
+        # #import users from text file
+        # with open("users.txt", "r") as myfile:
+        #     for line in myfile:
+        #         db.add_item(line)
         # loaded from config
         self.token = self.config.token
         # telegram api
