@@ -9,12 +9,15 @@ from Utils.logging import get_logger as log
 from config import BotConfig
 # Objects
 from Kubera.dividend_summary import DividendSummary as Ds
+import re
 
 
 class Share:
-    def __init__(self, name):
-        self.ticker_raw = name.upper()
-        self.ticker = self.ticker_raw + ".SI"
+    def __init__(self, ticker):
+        # remove non alpha numeric characters and change to upper case
+        self.ticker = re.sub(r'\W+', '', ticker).upper()
+        # ticker value to be used with yahoo finance api
+        self.yahoo_ticker = self.ticker + ".SI"
         # get ticker data
         self.is_valid = True
         self.data = self.__data()
@@ -23,15 +26,105 @@ class Share:
         self.book_value = self.__book_value()
         self.name = self.__name()
         self.price = self.__price()
+        self.volume = self.__volume()
+        self.open = self.__open()
+        # moving averages
         self.fifty_day_ma = self.__fiftydayma()
         self.two_hundred_day_ma = self.__twohundereddayma()
-        # # dividend information
-        # self.payout_amount = 'unavailable'
-        # self.payout_date = 'unavailable'
-        # self.yield_data = 'unavailable'
+
+    def __data(self):
+        try:
+            return data.get_quote_yahoo(self.yahoo_ticker)
+        except IndexError:
+            self.is_valid = False
+            return None
+        except KeyError:
+            self.is_valid = False
+            return None
+
+    def __name(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            return self.data['longName'].to_string(index=False)
+        except KeyError:
+            return 'unavailable'
+
+    def __price(self):
+        # if ticker data is unavailable
+        if not self.is_valid:
+            return 'unavailable'
+
+        try:
+            return float(self.data['price'].to_string(index=False))
+        except KeyError:
+            log().warning('price data not available for %s', self.ticker)
+            return 'unavailable'
+
+    def __market_cap(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            return millify(float(self.data['marketCap'].to_string(index=False)))
+        except KeyError:
+            return 'unavailable'
+
+    def __volume(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            return float(self.data['regularMarketChangePercent'].to_string(index=False))
+        except KeyError:
+            return 'unavailable'
+
+    def __book_value(self):
+        # if ticker data is unavailable
+        if not self.is_valid:
+            return 'unavailable'
+
+        try:
+            return float(self.data['bookValue'].to_string(index=False))
+        except KeyError:
+            return 'unavailable'
+
+    def __fiftydayma(self):
+        # if ticker data is unavailable
+        if not self.is_valid:
+            return 'unavailable'
+
+        try:
+            return float(self.data['fiftyDayAverage'].to_string(index=False))
+        except KeyError:
+            return 'unavailable'
+
+    def __twohundereddayma(self):
+        # if ticker data is unavailable
+        if not self.is_valid:
+            return 'unavailable'
+
+        try:
+            return float(self.data['twoHundredDayAverage'].to_string(index=False))
+        except KeyError:
+            return 'unavailable'
+
+    def __open(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            return float(self.data['regularMarketOpen'].to_string(index=False))
+        except KeyError:
+            return 'unavailable'
 
     def get_dividend_summary(self, start, end=0):
-        df = get_data(BotConfig().dividend_url, self.ticker_raw)
+        df = get_data(BotConfig().dividend_url, self.ticker)
         a = []
 
         if df is None:
@@ -62,89 +155,7 @@ class Share:
             counter -= 1
         return a
 
-    # def get_upcoming_dividends(self):
-    #     df = get_data(BotConfig().upcoming_dividends_url, self.ticker_raw)
-    #     self.payout_amount = str(df.loc[df.Ticker == self.ticker_raw, 'Amount'].values[0])
-    #     self.payout_date = pd.to_datetime(str(df.loc[df.Ticker == self.ticker_raw, 'NextDividend'].values[0])).strftime('%d %B %Y')
-    #     self.yield_data = str(df.loc[df.Ticker == self.ticker_raw, 'Yield'].values[0])
-
-    def __data(self):
-        try:
-            return data.get_quote_yahoo(self.ticker)
-        except IndexError:
-            self.is_valid = False
-            return None
-        except KeyError:
-            self.is_valid = False
-            return None
-
-    def __name(self):
-        # if ticker data is unavailable
-        if self.is_valid is False:
-            return 'unavailable'
-
-        try:
-            return self.data['longName'].to_string(index=False)
-        except KeyError:
-            # log().warning('name not available for %s', self.ticker)
-            return 'unavailable'
-
-    def __price(self):
-        # if ticker data is unavailable
-        if not self.is_valid:
-            return 'unavailable'
-
-        try:
-            return self.data['price'].to_string(index=False)
-        except KeyError:
-            log().warning('price data not available for %s', self.ticker)
-            return 'unavailable'
-
-    def __market_cap(self):
-        # if ticker data is unavailable
-        if self.is_valid is False:
-            return 'unavailable'
-
-        try:
-            return millify(float(self.data['marketCap'].to_string(index=False)))
-        except KeyError:
-            # log().warning('market cap data not available for %s', self.ticker)
-            return 'unavailable'
-
-    def __book_value(self):
-        # if ticker data is unavailable
-        if not self.is_valid:
-            return 'unavailable'
-
-        try:
-            return self.data['bookValue'].to_string(index=False)
-        except KeyError:
-            # log().warning('book value data not available for %s', self.ticker)
-            return 'unavailable'
-
-    def __fiftydayma(self):
-        # if ticker data is unavailable
-        if not self.is_valid:
-            return 'unavailable'
-
-        try:
-            return self.data['fiftyDayAverage'].to_string(index=False)
-        except KeyError:
-            log().warning('price data not available for %s', self.ticker)
-            return 'unavailable'
-
-    def __twohundereddayma(self):
-        # if ticker data is unavailable
-        if not self.is_valid:
-            return 'unavailable'
-
-        try:
-            return self.data['twoHundredDayAverage'].to_string(index=False)
-        except KeyError:
-            log().warning('price data not available for %s', self.ticker)
-            return 'unavailable'
-
     def __str__(self):
-        return 'Name:' + self.name + ' (' + self.ticker_raw + ')\nLatest price: SGD' + str(
+        return 'Name:' + self.name + ' (' + self.ticker + ')\nLatest price: SGD' + str(
             self.price) + '\nMarket Cap: ' + str(
             self.market_cap) + '\nBook Value Per Share (MRQ): SGD' + self.book_value 
