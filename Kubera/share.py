@@ -79,7 +79,7 @@ class Share:
             return 'unavailable'
 
         try:
-            return float(self.data['regularMarketChangePercent'].to_string(index=False))
+            return float(self.data['regularMarketVolume'].to_string(index=False))
         except KeyError:
             return 'unavailable'
 
