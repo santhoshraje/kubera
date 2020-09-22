@@ -22,9 +22,9 @@ class Share:
         self.is_valid = True
         self.data = self.__data()
         # general information
+        self.name = self.__name()
         self.market_cap = self.__market_cap()
         self.book_value = self.__book_value()
-        self.name = self.__name()
         self.price = self.__price()
         self.volume = self.__volume()
         self.open = self.__open()
