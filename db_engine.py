@@ -14,12 +14,13 @@ class DBEngine:
                 self.conn = sqlite3.connect(dbname)
             except sqlite3.Error as e:
                 log().critical('local database initialisation error: "%s"', e)
+                self.conn = None
+            self.create_table('users', 'id integer, username text, first text, last text, persona text')
+            self.create_table('stocks', 'ticker text, volume float')
 
-        def setup(self):
-            user_table = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username text, first text, last text, persona text)"
-            stock_table = "CREATE TABLE IF NOT EXISTS stocks (ticker text, volume float)"
-            self.conn.execute(user_table)
-            self.conn.execute(stock_table)
+        def create_table(self, table, columns):
+            table = "CREATE TABLE IF NOT EXISTS " + table + " (" + columns + ")"
+            self.conn.execute(table)
             self.conn.commit()
 
         # create
@@ -53,8 +54,8 @@ class DBEngine:
             self.conn.commit()
 
         # delete
-        def delete_item(self, column, item):
-            stmt = "DELETE FROM users WHERE " + column + " = (?)"
+        def delete_item(self, table, column, item):
+            stmt = "DELETE FROM " + table + " WHERE " + column + " = (?)"
             args = (item,)
             self.conn.execute(stmt, args)
             self.conn.commit()
