@@ -16,20 +16,21 @@ class DBEngine:
                 log().critical('local database initialisation error: "%s"', e)
 
         def setup(self):
-            stmt = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username text, first text, last text, " \
-                   "persona text) "
-            self.conn.execute(stmt)
+            user_table = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username text, first text, last text, persona text)"
+            stock_table = "CREATE TABLE IF NOT EXISTS stocks (ticker text, volume float)"
+            self.conn.execute(user_table)
+            self.conn.execute(stock_table)
             self.conn.commit()
 
         # create
-        def add_item(self, values, columns):
+        def add_item(self, table, columns, values):
             # Check for single column insert
             if isinstance(columns, str):
                 values, columns = (values,), (columns,)
 
             assert len(values) == len(columns), 'Mismatch between values and columns'
 
-            template = """INSERT INTO users ({}) VALUES ({})"""
+            template = "INSERT INTO " + table + " ({}) VALUES ({})"
 
             cols = ','.join([f'"{col}"' for col in columns])
             placeholders = ','.join(['?'] * len(values))
@@ -39,14 +40,14 @@ class DBEngine:
             self.conn.commit()
 
         # read
-        def get_items(self, column):
-            rows = self.conn.execute("SELECT " + column + " FROM users").fetchall()
+        def get_items(self, table, column):
+            rows = self.conn.execute("SELECT " + column + " FROM " + table)
             self.conn.commit()
             return rows
 
         # update
-        def update_item(self, first, second, third, fourth):
-            stmt = "UPDATE users SET " + first + " = ? WHERE " + third + " = ?"
+        def update_item(self, table, first, second, third, fourth):
+            stmt = "UPDATE " + table + " SET " + first + " = ? WHERE " + third + " = ?"
             args = (second, fourth,)
             self.conn.execute(stmt, args)
             self.conn.commit()
@@ -57,6 +58,12 @@ class DBEngine:
             args = (item,)
             self.conn.execute(stmt, args)
             self.conn.commit()
+
+        # custom commands
+        def custom_command(self, command):
+            rows = self.conn.execute(command)
+            self.conn.commit()
+            return rows
 
     def __init__(self, dbname="kubera.sqlite"):
         if not DBEngine.__instance:
