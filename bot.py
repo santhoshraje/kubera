@@ -12,10 +12,13 @@ from Controllers.feedback_button import FeedbackButton
 from Controllers.cancel_button import CancelButton
 #jobs
 from Jobs.get_upcoming_dividends import get_upcoming_dividends
+from Jobs.post_market_analysis import post_market_analysis
 #config
 from config import BotConfig
 #db
 from db_engine import DBEngine
+# tools
+import datetime, pytz
 
 
 class Bot:
@@ -25,10 +28,6 @@ class Bot:
         # db engine
         db = DBEngine()
         db.setup()
-        # #import users from text file
-        # with open("users.txt", "r") as myfile:
-        #     for line in myfile:
-        #         db.add_item(line)
         # loaded from config
         self.token = self.config.token
         # telegram api
@@ -49,6 +48,8 @@ class Bot:
         SendUpdate(self.dp)
         # add jobs
         self.job_queue.run_repeating(get_upcoming_dividends, interval=3600, first=0)
+        dt = datetime.time(hour=9, minute=1) # 5:01 PM singapore time (after market close)
+        self.job_queue.run_daily(post_market_analysis, dt)
         # start bot
         self.updater.start_polling()
         self.updater.idle()
