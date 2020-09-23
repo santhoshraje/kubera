@@ -14,10 +14,17 @@ import re
 
 class Share:
     def __init__(self, ticker):
-        # remove non alpha numeric characters and change to upper case
-        self.ticker = re.sub(r'\W+', '', ticker).upper()
-        # ticker value to be used with yahoo finance api
-        self.yahoo_ticker = self.ticker + ".SI"
+        # check if index
+        if '^' in ticker:
+            # change to upper case
+            self.ticker = ticker.upper()
+            # ticker value to be used with yahoo finance api
+            self.yahoo_ticker = self.ticker
+        else:
+            # remove non alpha numeric characters and change to upper case
+            self.ticker = re.sub(r'\W+', '', ticker).upper()
+            # ticker value to be used with yahoo finance api
+            self.yahoo_ticker = self.ticker + ".SI"
         # get ticker data
         self.is_valid = True
         self.data = self.__data()
@@ -31,6 +38,8 @@ class Share:
         # moving averages
         self.fifty_day_ma = self.__fiftydayma()
         self.two_hundred_day_ma = self.__twohundereddayma()
+        # percent change from open
+        self.percent_changed = self.__percent_changed()
 
     def __data(self):
         try:
@@ -155,7 +164,21 @@ class Share:
             counter -= 1
         return a
 
+    def __percent_changed(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            change = float(self.data['regularMarketChangePercent'].to_string(index=False))
+            if change < 0:
+                return "{:.2f}".format(change) + '%'
+            else:
+                return "+{:.2f}".format(change) + '%'
+        except KeyError:
+            return 'unavailable'
+
     def __str__(self):
         return 'Name:' + self.name + ' (' + self.ticker + ')\nLatest price: SGD' + str(
             self.price) + '\nMarket Cap: ' + str(
-            self.market_cap) + '\nBook Value Per Share (MRQ): SGD' + self.book_value 
+            self.market_cap) + '\nBook Value Per Share (MRQ): SGD' + self.book_value
