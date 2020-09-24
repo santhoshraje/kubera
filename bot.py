@@ -27,7 +27,7 @@ class Bot:
         log().info('kubera version ' + self.config.version + ' active')
         # db engine
         db = DBEngine()
-        db.setup()
+        # db.setup()
         # loaded from config
         self.token = self.config.token
         # telegram api
