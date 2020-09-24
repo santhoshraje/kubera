@@ -13,25 +13,52 @@ def post_market_analysis(context: telegram.ext.CallbackContext):
     db = DBEngine('test.sqlite')
     # fetch tickers
     tickers = db.get_items('stocks', 'ticker')
-    # get volumes
+    # update values
     for ticker in tickers:
         share = Share(ticker[0])
         # ignore tickers with missing volume information
         if share.volume is 'unavailable':
             continue
-        # update ticker with latest volume information
+        # add volume to database
         db.update_item('stocks', 'volume', share.volume, 'ticker', ticker[0])
+        # add company name to database
+        db.update_item('stocks', 'name', share.name, 'ticker', ticker[0])
+        # add change % to database
+        db.update_item('stocks', 'change', share.percent_changed, 'ticker', ticker[0])
         time.sleep(1)
 
-    # get top 5 results from database sorted in desc order
-    rows = db.custom_command('select ticker, volume from stocks order by volume desc limit 5')
-    # create string
-    s = '<b> Post market analysis for ' + datetime.today().strftime('%d %B %Y') + '</b>\n\n'
-    s += '<b>STI overall change: </b>' + Share('^STI').percent_changed + '\n\n'
-    s += '<b>Top 5 volume stocks\n\n</b>'
+    # get top 5 results from database sorted
+    volume = db.custom_command('select name, volume from stocks order by volume desc limit 5')
+    gainers = db.custom_command('select name from stocks order by change desc limit 5')
+    losers = db.custom_command('select name from stocks order by change asc limit 5')
 
-    for idx, row in enumerate(rows):
-        s += str(idx + 1) + '. ' + Share(row[0]).name + '(' + Share(row[0]).ticker + ')' + ' [' + str(millify(row[1])) + '] \n'
+    # STI change
+    sti_change_raw = Share('^STI').percent_changed
+    # append '%'
+    sti_change = str(sti_change_raw) + '%'
+    # prepend '+' if the value is positive
+    if sti_change_raw > 0:
+        sti_change = '+' + sti_change
+
+    # create string
+    s = '<b>Post market analysis for ' + datetime.today().strftime('%d %B %Y') + '</b>\n\n'
+    s += '<b>STI overall change: </b>' + sti_change + '\n\n'
+    s += '<b>Highest volumes:</b>\n'
+
+    for idx, row in enumerate(volume):
+        s += '‣ ' + row[0] + ' (' + str(millify(row[1])) + ')\n'
+
+    s += '\n'
+    s += '<b>Top gainers:</b>\n'
+
+    for idx, row in enumerate(gainers):
+        s += '‣ ' + row[0] + '\n'
+
+    s += '\n'
+    s += '<b>Top losers:</b>\n'
+
+    for idx, row in enumerate(losers):
+        s += '‣ ' + row[0] + '\n'
 
     # send message to all users
     for user in DBEngine().get_items():
