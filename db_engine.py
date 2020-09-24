@@ -16,7 +16,7 @@ class DBEngine:
                 log().critical('local database initialisation error: "%s"', e)
                 self.conn = None
             self.create_table('users', 'id integer, username text, first text, last text, persona text')
-            self.create_table('stocks', 'ticker text, volume float')
+            self.create_table('stocks', 'name text, ticker text, volume float, change float')
 
         def create_table(self, table, columns):
             table = "CREATE TABLE IF NOT EXISTS " + table + " (" + columns + ")"
