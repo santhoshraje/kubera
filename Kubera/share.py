@@ -35,6 +35,8 @@ class Share:
         self.price = self.__price()
         self.volume = self.__volume()
         self.open = self.__open()
+        self.market = self.__market()
+        self.type = self.__type()
         # moving averages
         self.fifty_day_ma = self.__fiftydayma()
         self.two_hundred_day_ma = self.__twohundereddayma()
@@ -132,6 +134,37 @@ class Share:
         except KeyError:
             return 'unavailable'
 
+    def __market(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            return self.data['market'].to_string(index=False)
+        except KeyError:
+            return 'unavailable'
+
+    def __type(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            return self.data['quoteType'].to_string(index=False).lower()
+        except KeyError:
+            return 'unavailable'
+
+    def __percent_changed(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            change = float(self.data['regularMarketChangePercent'].to_string(index=False))
+            return float("{:.2f}".format(change))
+        except KeyError:
+            return 'unavailable'
+
     def get_dividend_summary(self, start, end=0):
         df = get_data(BotConfig().dividend_url, self.ticker)
         a = []
@@ -163,20 +196,6 @@ class Share:
                 break
             counter -= 1
         return a
-
-    def __percent_changed(self):
-        # if ticker data is unavailable
-        if self.is_valid is False:
-            return 'unavailable'
-
-        try:
-            change = float(self.data['regularMarketChangePercent'].to_string(index=False))
-            if change < 0:
-                return "{:.2f}".format(change) + '%'
-            else:
-                return "+{:.2f}".format(change) + '%'
-        except KeyError:
-            return 'unavailable'
 
     def __str__(self):
         return 'Name:' + self.name + ' (' + self.ticker + ')\nLatest price: SGD' + str(
