@@ -10,7 +10,7 @@ from datetime import datetime
 
 def post_market_analysis(context: telegram.ext.CallbackContext):
     # connect to database
-    db = DBEngine('test.sqlite')
+    db = DBEngine()
     # fetch tickers
     tickers = db.get_items('stocks', 'ticker')
     # update values
