@@ -10,6 +10,7 @@ from config import BotConfig
 # Objects
 from Kubera.dividend_summary import DividendSummary as Ds
 import re
+import time
 
 
 class Share:
@@ -42,6 +43,8 @@ class Share:
         self.two_hundred_day_ma = self.__twohundereddayma()
         # percent change from open
         self.percent_changed = self.__percent_changed()
+        # change from open
+        self.change = self.__change()
 
     def __data(self):
         try:
@@ -52,6 +55,11 @@ class Share:
         except KeyError:
             self.is_valid = False
             return None
+        except ConnectionError as e:
+            print(str(e))
+            time.sleep(10)
+            self.__data()
+
 
     def __name(self):
         # if ticker data is unavailable
@@ -150,7 +158,7 @@ class Share:
             return 'unavailable'
 
         try:
-            return self.data['quoteType'].to_string(index=False).lower()
+            return re.sub(r'\W+', '', self.data['quoteType'].to_string(index=False)).lower()
         except KeyError:
             return 'unavailable'
 
@@ -161,6 +169,17 @@ class Share:
 
         try:
             change = float(self.data['regularMarketChangePercent'].to_string(index=False))
+            return float("{:.2f}".format(change))
+        except KeyError:
+            return 'unavailable'
+
+    def __change(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            change = float(self.data['regularMarketChange'].to_string(index=False))
             return float("{:.2f}".format(change))
         except KeyError:
             return 'unavailable'
