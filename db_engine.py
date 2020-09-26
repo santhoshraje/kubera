@@ -15,9 +15,10 @@ class DBEngine:
             except sqlite3.Error as e:
                 log().critical('local database initialisation error: "%s"', e)
                 self.conn = None
-            self.create_table('users', 'id integer, username text, first text, last text, persona text')
+            self.create_table('users', 'id integer PRIMARY KEY, username text, first text, last text, persona text')
             self.create_table('stocks', 'name text, ticker text, volume float, change float')
 
+        # create a new table
         def create_table(self, table, columns):
             table = "CREATE TABLE IF NOT EXISTS " + table + " (" + columns + ")"
             self.conn.execute(table)
@@ -37,8 +38,12 @@ class DBEngine:
             placeholders = ','.join(['?'] * len(values))
             stmt = template.format(cols, placeholders)
 
-            self.conn.execute(stmt, values)
-            self.conn.commit()
+            try:
+                self.conn.execute(stmt, values)
+                self.conn.commit()
+                return True
+            except sqlite3.IntegrityError:
+                return False
 
         # read
         def get_items(self, table, column):
@@ -65,6 +70,12 @@ class DBEngine:
             rows = self.conn.execute(command)
             self.conn.commit()
             return rows
+
+        # show all the columns in a table
+        def show_all_columns(self, table):
+            stmt = "PRAGMA table_info(" + table + ")"
+            self.conn.execute(stmt)
+            self.conn.commit()
 
     def __init__(self, dbname="kubera.sqlite"):
         if not DBEngine.__instance:
