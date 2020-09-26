@@ -35,7 +35,11 @@ class MainMenu:
     def __show_menu(self, update, context):
         user = update.effective_user
         log().info("User %s [id: %s] started the conversation.", user.first_name, user.id)
-        # DBEngine().add_item(user.id)
+        # add new user
+        DBEngine().add_item('users', 'id', user.id)
+        DBEngine().update_item('users', 'first', user.first_name, 'id', user.id)
+        DBEngine().update_item('users', 'last', user.last_name, 'id', user.id)
+        DBEngine().update_item('users', 'username', user.username, 'id', user.id)
 
         keyboard = [
             [InlineKeyboardButton("🔸Upcoming Dividends",
