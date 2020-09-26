@@ -15,14 +15,15 @@ class MainMenu:
     def __init__(self, dispatcher):
         self.__dp = dispatcher
         self.__handler()
-        self.__menu_text = "<b>Kubera [v" + BotConfig().version + "]</b>\nKubera is a trading assistant that is " \
-                                                                  "designed to make your life easier.\n\n<b>Supported " \
+        self.__menu_text = "<b>Kubera [v" + BotConfig().version + "]</b>\nKubera is a stock trading assistant that is " \
+                                                                  "designed to help you make money.\n\n<b>Supported " \
                                                                   "Exchanges</b>:\nSGX \n\n<b>Bot " \
                                                                   "Features:</b>\nUpcoming Dividends\nDividend " \
                                                                   "payouts that are coming soon.\n\nDividend " \
                                                                   "Summary\nDividends paid by a company over the last " \
-                                                                  "5 years.\n\nDividend Calculator\nCalculate your " \
-                                                                  "dividend payout.\n\n<b>Data " \
+                                                                  "5 years.\n\nMarket Statistics Report\nMarket " \
+                                                                  "statistics for the day delivered daily " \
+                                                                  "after market close.\n\n<b>Data " \
                                                                   "Sources</b>:\n<code>dividends.sg</code>\nYahoo " \
                                                                   "Finance "
 
