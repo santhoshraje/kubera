@@ -24,7 +24,7 @@ def post_market_analysis(context: telegram.ext.CallbackContext):
         # add company name to database
         db.update_item('stocks', 'name', share.name, 'ticker', ticker[0])
         # add change % to database
-        db.update_item('stocks', 'change', share.percent_changed, 'ticker', ticker[0])
+        db.update_item('stocks', 'change', share.change, 'ticker', ticker[0])
         time.sleep(1)
 
     # get top 5 results from database sorted
@@ -61,10 +61,10 @@ def post_market_analysis(context: telegram.ext.CallbackContext):
         s += '‣ ' + row[0] + '\n'
 
     # send message to all users
-    for user in DBEngine().get_items():
+    for user in DBEngine().get_items('users', 'id'):
         try:
             context.bot.send_message(chat_id=user, text=s, parse_mode='HTML')
             time.sleep(1)
-        except TelegramError as e:
+        except TelegramError:
             DBEngine().delete_item(user)
             continue
