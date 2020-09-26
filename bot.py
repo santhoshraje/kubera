@@ -48,7 +48,7 @@ class Bot:
         # jobs
         self.job_queue.run_repeating(get_upcoming_dividends, interval=3600, first=0)
         # 5:01 PM singapore time (after market close)
-        self.job_queue.run_daily(post_market_analysis, datetime.time(hour=9, minute=00))
+        self.job_queue.run_daily(post_market_analysis, datetime.time(hour=9, minute=00), (1, 2, 3, 4, 5))
         # start bot
         self.updater.start_polling()
         self.updater.idle()
