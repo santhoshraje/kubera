@@ -41,7 +41,7 @@ def post_market_analysis(context: telegram.ext.CallbackContext):
         sti_change = '+' + sti_change
 
     # create string
-    s = '<b>Post market analysis for ' + datetime.today().strftime('%d %B %Y') + '</b>\n\n'
+    s = '<b>Market Statistics (' + datetime.today().strftime('%d %B %Y') + ')</b>\n\n'
     s += '<b>STI overall change: </b>' + sti_change + '\n\n'
     s += '<b>Highest volumes:</b>\n'
 
