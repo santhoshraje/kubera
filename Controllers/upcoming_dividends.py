@@ -55,40 +55,40 @@ class UpcomingDividends:
 
         tmp = ''
         for a in array_1:
-            tmp += '<b>' + a.name.lstrip() + ' (' + a.ticker_raw + ')</b>\n‣ Market Cap: ' + a.market_cap \
-                    + '\n‣ BVPS (MRQ): ' + a.book_value + '\n‣ Price: ' + a.price + \
+            tmp += '<b>' + a.name.lstrip() + ' (' + a.ticker + ')</b>\n‣ Market Cap: ' + str(a.market_cap) \
+                    + '\n‣ BVPS (MRQ): ' + str(a.book_value) + '\n‣ Price: ' + str(a.price) + \
                     '\n‣ Amount: ' + str(a.payout_amount) + '\n‣ Yield: ' + a.yield_data + '\n‣ Date: ' + a.payout_date + '\n\n'
         context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
         time.sleep(0.5)
 
         tmp = ''
         for b in array_2:
-            tmp += '<b>' + b.name.lstrip() + ' (' + b.ticker_raw + ')</b>\n‣ Market cap: ' + b.market_cap \
-                    + '\n‣ Book value: ' + b.book_value + '\n‣ Price: ' + b.price + \
+            tmp += '<b>' + b.name.lstrip() + ' (' + str(b.ticker) + ')</b>\n‣ Market cap: ' + str(b.market_cap) \
+                    + '\n‣ Book value: ' + str(b.book_value) + '\n‣ Price: ' + str(b.price) + \
                     '\n‣ Amount: ' + str(b.payout_amount) + '\n‣ Yield: ' + b.yield_data + '\n‣ Date: ' + b.payout_date + '\n\n'
         context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
         time.sleep(0.5)
 
         tmp = ''
         for c in array_3:
-            tmp += '<b>' + c.name.lstrip() + ' (' + c.ticker_raw + ')</b>\n‣ Market cap: ' + c.market_cap \
-                    + '\n‣ Book value: ' + c.book_value + '\n‣ Price:' + c.price + \
+            tmp += '<b>' + c.name.lstrip() + ' (' + str(c.ticker) + ')</b>\n‣ Market cap: ' + str(c.market_cap) \
+                    + '\n‣ Book value: ' + str(c.book_value) + '\n‣ Price:' + str(c.price) + \
                     '\n‣ Amount: ' + str(c.payout_amount) + '\n‣ Yield: ' + c.yield_data + '\n‣ Date: ' + c.payout_date + '\n\n'
         context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
         time.sleep(0.5)
 
         tmp = ''
         for d in array_4:
-            tmp += '<b>' + d.name.lstrip() + ' (' + d.ticker_raw + ')</b>\n‣ Market cap: ' + d.market_cap \
-                    + '\n‣ Book value: ' + d.book_value + '\n‣ Price: ' + d.price + \
+            tmp += '<b>' + d.name.lstrip() + ' (' + str(d.ticker) + ')</b>\n‣ Market cap: ' + str(d.market_cap) \
+                    + '\n‣ Book value: ' + str(d.book_value) + '\n‣ Price: ' + str(d.price) + \
                     '\n‣ Amount: ' + str(d.payout_amount) + '\n‣ Yield: ' + d.yield_data + '\n‣ Date: ' + d.payout_date + '\n\n'
         context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
         time.sleep(0.5)
 
         tmp = ''
         for e in array_5:
-            tmp += '<b>' + e.name.lstrip() + ' (' + e.ticker_raw + ')</b>\n‣ Market cap: ' + e.market_cap \
-                    + '\n‣ Book value: ' + e.book_value + '\n‣ Price: ' + e.price + \
+            tmp += '<b>' + e.name.lstrip() + ' (' + str(e.ticker) + ')</b>\n‣ Market cap: ' + str(e.market_cap) \
+                    + '\n‣ Book value: ' + str(e.book_value) + '\n‣ Price: ' + str(e.price) + \
                     '\n‣ Amount: ' + str(e.payout_amount) + '\n‣ Yield: ' + e.yield_data + '\n‣ Date: ' + e.payout_date + '\n\n'
         context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=tmp, parse_mode='html', silent=True)
 
