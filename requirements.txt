@@ -11,7 +11,7 @@ lxml==4.5.1
 millify==0.1.1
 numpy==1.19.0
 pandas==1.0.5
-pandas-datareader==0.8.1
+pandas-datareader==0.9.0
 pycparser==2.20
 python-dateutil==2.8.1
 python-telegram-bot==12.8
