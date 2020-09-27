@@ -17,7 +17,7 @@ def post_market_analysis(context: telegram.ext.CallbackContext):
     for ticker in tickers:
         share = Share(ticker[0])
         # ignore tickers with missing volume information
-        if share.volume is 'unavailable':
+        if share.volume == 'unavailable':
             continue
         # add volume to database
         db.update_item('stocks', 'volume', share.volume, 'ticker', ticker[0])
