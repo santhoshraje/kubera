@@ -1,11 +1,11 @@
 import telegram.ext
 from telegram import TelegramError
-
 from db_engine import DBEngine
 from Kubera.share import Share
 from millify import millify
 import time
 from datetime import datetime
+from Utils.logging import get_logger as log
 
 
 def post_market_analysis(context: telegram.ext.CallbackContext):
@@ -29,8 +29,8 @@ def post_market_analysis(context: telegram.ext.CallbackContext):
 
     # get top 5 results from database sorted
     volume = db.custom_command('select name, volume from stocks order by volume desc limit 5')
-    gainers = db.custom_command('select name from stocks order by change desc limit 5')
-    losers = db.custom_command('select name from stocks order by change asc limit 5')
+    gainers = db.custom_command('select name, change from stocks order by change desc limit 5')
+    losers = db.custom_command('select name, change from stocks order by change asc limit 5')
 
     # STI change
     sti_change_raw = Share('^STI').percent_changed
@@ -46,25 +46,29 @@ def post_market_analysis(context: telegram.ext.CallbackContext):
     s += '<b>Highest volumes:</b>\n'
 
     for idx, row in enumerate(volume):
-        s += '‣ ' + row[0] + ' (' + str(millify(row[1])) + ')\n'
+        s += '‣ ' + row[0] + ' [' + str(millify(row[1])) + ']\n'
 
     s += '\n'
     s += '<b>Top gainers:</b>\n'
 
     for idx, row in enumerate(gainers):
-        s += '‣ ' + row[0] + '\n'
+        s += '‣ ' + row[0] + ' [+' + str(row[1]) + ']' + '\n'
 
     s += '\n'
     s += '<b>Top losers:</b>\n'
 
     for idx, row in enumerate(losers):
-        s += '‣ ' + row[0] + '\n'
+        s += '‣ ' + row[0] + ' [' + str(row[1]) + ']' + '\n'
 
+    total_users = 0
     # send message to all users
     for user in DBEngine().get_items('users', 'id'):
         try:
-            context.bot.send_message(chat_id=user, text=s, parse_mode='HTML')
+            context.bot.send_message(chat_id=user[0], text=s, parse_mode='HTML')
+            total_users += 1
             time.sleep(1)
         except TelegramError:
-            DBEngine().delete_item(user)
+            DBEngine().delete_item('users', 'id', user[0])
             continue
+
+    log().info('market statistics sent to ' + str(total_users) + ' users')
