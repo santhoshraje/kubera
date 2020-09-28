@@ -12,11 +12,11 @@ class DBEngine:
             self.dbname = dbname
             try:
                 self.conn = sqlite3.connect(dbname)
+                self.create_table('users', 'id integer PRIMARY KEY, username text, first text, last text, persona text')
+                self.create_table('stocks', 'name text, ticker text, volume float, change float')
             except sqlite3.Error as e:
                 log().critical('local database initialisation error: "%s"', e)
                 self.conn = None
-            self.create_table('users', 'id integer PRIMARY KEY, username text, first text, last text, persona text')
-            self.create_table('stocks', 'name text, ticker text, volume float, change float')
 
         # create a new table
         def create_table(self, table, columns):
@@ -74,8 +74,9 @@ class DBEngine:
         # show all the columns in a table
         def show_all_columns(self, table):
             stmt = "PRAGMA table_info(" + table + ")"
-            self.conn.execute(stmt)
+            columns = self.conn.execute(stmt)
             self.conn.commit()
+            return columns
 
     def __init__(self, dbname="kubera.sqlite"):
         if not DBEngine.__instance:
