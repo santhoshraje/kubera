@@ -67,7 +67,7 @@ class Share:
             return 'unavailable'
 
         try:
-            return self.data['longName'].to_string(index=False)
+            return self.data['shortName'].to_string(index=False)
         except KeyError:
             return 'unavailable'
 
