@@ -5,7 +5,7 @@ from Controllers.send_update import SendUpdate
 from Utils.logging import get_logger as log
 # controllers
 from Controllers.main_menu import MainMenu
-from Controllers.dividend_calculator import DividendCalculator
+# from Controllers.dividend_calculator import DividendCalculator
 from Controllers.dividend_summary import DividendSummary
 from Controllers.upcoming_dividends import UpcomingDividends
 from Controllers.feedback_button import FeedbackButton
@@ -39,7 +39,7 @@ class Bot:
         self.dp.add_error_handler(self.error)
         # controllers
         MainMenu(self.dp)
-        DividendCalculator(self.dp)
+        # DividendCalculator(self.dp)
         DividendSummary(self.dp)
         UpcomingDividends(self.dp)
         FeedbackButton(self.dp)
@@ -48,7 +48,7 @@ class Bot:
         # jobs
         self.job_queue.run_repeating(get_upcoming_dividends, interval=3600, first=0)
         # 5:01 PM singapore time (after market close)
-        self.job_queue.run_daily(post_market_analysis, datetime.time(hour=9, minute=00), (1, 2, 3, 4, 5))
+        self.job_queue.run_daily(post_market_analysis, datetime.time(hour=9, minute=1), (0, 1, 2, 3, 4))
         # start bot
         self.updater.start_polling()
         self.updater.idle()
