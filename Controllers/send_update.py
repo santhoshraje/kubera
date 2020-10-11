@@ -36,16 +36,16 @@ class SendUpdate:
 
     def __yes(self, update, context):
         # send to users
-        for user in DBEngine().get_items():
+        for user in DBEngine().get_items('users', 'id'):
             try:
-                context.bot.send_message(chat_id=user, text=self.__message, parse_mode='HTML')
-                log().info('Message has been sent to %s', user)
+                context.bot.send_message(chat_id=user[0], text=self.__message, parse_mode='HTML')
+                log().info('Message has been sent to %s', user[0])
                 time.sleep(1)
             except TelegramError as e:
                 log().warning(e)
-                log().warning('User %s has blocked the bot', user)
-                DBEngine().delete_item(user)
-                log().info('User %s has been removed from the database', user)
+                log().warning('User %s has blocked the bot', user[0])
+                # DBEngine().delete_item('users', 'id', user[0])
+                # log().info('User %s has been removed from the database', user[0])
                 continue
 
         # send message
