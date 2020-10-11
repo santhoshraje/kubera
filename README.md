@@ -11,6 +11,7 @@ Features:
  - Upcoming dividends from SGX listed companies
  - Dividend payout summary over the last 5 years for any SGX listed company
  - Dividend calculator. Calculate by number of shares or amount spent.
+ - Post market analysis stats. Sends a report of the top losers, gainers and highest volumes to the user after market closing everyday.
  
  Kubera is live and available for public use on telegram: @kubera_bot
  
