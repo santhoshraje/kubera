@@ -12,8 +12,13 @@ class DBEngine:
             self.dbname = dbname
             try:
                 self.conn = sqlite3.connect(dbname)
+                # user table
                 self.create_table('users', 'id integer PRIMARY KEY, username text, first text, last text, persona text')
+                # stocks table
                 self.create_table('stocks', 'name text, ticker text, volume float, change float')
+                # upcoming dividends table
+                self.create_table('dividends', 'name text, ticker text, market_cap text, price text, payout text, '
+                                               'yield text, date text')
             except sqlite3.Error as e:
                 log().critical('local database initialisation error: "%s"', e)
                 self.conn = None
