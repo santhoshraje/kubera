@@ -191,7 +191,7 @@ class Share:
         if df is None:
             return None
 
-        if end is 0:
+        if end == 0:
             try:
                 amount = df.loc[df.Year == start, 'Amount'].values.tolist()
                 ex_date = df.loc[df.Year == start, 'ExDate'].values.tolist()
