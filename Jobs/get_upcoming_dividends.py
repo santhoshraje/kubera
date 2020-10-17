@@ -5,14 +5,15 @@ import pickle
 import numpy as np
 import telegram.ext
 from config import BotConfig
+from db_engine import DBEngine
 
 
 def get_upcoming_dividends(context: telegram.ext.CallbackContext):
-    array = []
     url = BotConfig().upcoming_dividends_url
     html = requests.get(url).text
     df = pd.read_html(html)[0]
     df.columns = df.columns.str.replace(' ', '')
+    db = DBEngine()
 
     tickers = df['Ticker'].tolist()
 
@@ -20,17 +21,12 @@ def get_upcoming_dividends(context: telegram.ext.CallbackContext):
         share = Share(ticker)
         if not share.is_valid:
             continue
-        share.payout_amount = str(df.loc[df.Ticker == ticker, 'Amount'].values[0])
-        share.payout_date = pd.to_datetime(str(df.loc[df.Ticker == ticker, 'NextDividend'].values[0])).strftime(
-            '%d %B %Y')
-        share.yield_data = str(df.loc[df.Ticker == ticker, 'Yield'].values[0])
-        array.append(share)
+        name = share.name
+        ticker = share.ticker
+        market_cap = share.market_cap
+        price = str(share.price)
+        payout = str(df.loc[df.Ticker == ticker, 'Amount'].values[0])
+        date = pd.to_datetime(str(df.loc[df.Ticker == ticker, 'NextDividend'].values[0])).strftime('%d %B %Y')
+        yield_value = str(df.loc[df.Ticker == ticker, 'Yield'].values[0])
+        db.add_item('dividends', ['name', 'ticker', 'market_cap', 'price', 'payout', 'yield', 'date'], [name, ticker, market_cap, price, payout, yield_value, date])
 
-    tmp = np.array_split(array, 5)
-    file_count = 1
-
-    for x in tmp:
-        f = open("Logs/upcoming" + str(file_count) + ".pickle", 'wb')
-        pickle.dump(x, f)
-        f.close()
-        file_count += 1
