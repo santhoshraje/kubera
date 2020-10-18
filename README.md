@@ -44,3 +44,11 @@ You may host the bot on any server that has python 3 installed
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
+## Special thanks
+
+ - <a href ="https://github.com/mmdaz/mvc_model_bot_developing">mmdaz</a> - Basic structure for MVC bot architecture
+ - <a href ="https://github.com/xlanor/SIM-UoW-Timetable-bot">xlanor</a> - Great example of a telegram bot with MVC architecture
+ - <a href ="https://www.freelogodesign.org/">FreeLogoDesign.org</a> - Cool logo for my project
+
+
+
