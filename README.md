@@ -1,5 +1,5 @@
 <p align="center"><img src="https://github.com/santhoshraje/kubera/blob/master/logo.png"></p>
-<h4 align="center">Smart personal assistant for retail stock traders</h4>
+<h4 align="center">A smart personal assistant for retail stock traders</h4>
 
 <p align="center">
 <img src="https://img.shields.io/badge/built%20with-Python3-red.svg" />
