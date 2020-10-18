@@ -12,6 +12,14 @@
 
 <p align="center">
   <a href="#Overview">Overview</a> •
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#Deployment">Deployment</a> •
+  <a href="#License">License</a> •
+  <a href="#special-thanks">Special Thanks</a> 
+
+
+  Usage
+
 </p>
 
  ## Overview
