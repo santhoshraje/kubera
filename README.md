@@ -13,7 +13,7 @@
  ## Overview
 
 Features: 
- - Show all upcoming dividend payouts from all companies
+ - Display all upcoming dividend payouts from all companies
  - Summary of dividends paid by a company over the last 5 years
  - Dividend estimator. Estimate total dividends earned this year using data from last year
  - Post market analysis. Receive an automatically generated report of the top losers, gainers and highest volumes to the user after market close everyday.
