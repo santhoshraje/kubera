@@ -3,6 +3,7 @@
 <a href="https://www.python.org/">
   <img src="https://img.shields.io/badge/built%20with-Python3-red.svg" />
   <img src="https://img.shields.io/github/v/release/santhoshraje/kubera" />
+  <img src="https://img.shields.io/badge/telegram-%40kubera__bot-blue" />
 </a>
 
 Kubera is a telegram bot that is designed to simplify the lives of securities traders. Only SGX securities are supported.
@@ -13,9 +14,7 @@ Features:
  - Dividend payout summary over the last 5 years for any SGX listed company
  - Dividend calculator. Calculate by number of shares or amount spent.
  - Post market analysis. Sends an automatically generated report of the top losers, gainers and highest volumes to the user after market close everyday.
- 
- Kubera is live and available for public use on telegram: @kubera_bot
- 
+  
  ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development, testing and deployment purposes.
