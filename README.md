@@ -15,6 +15,7 @@
   <a href="#Overview">Overview</a> •
   <a href="#getting-started">Getting Started</a> •
   <a href="#Deployment">Deployment</a> •
+  <a href="#Libraries">Libraries</a> •
   <a href="#License">License</a> •
   <a href="#special-thanks">Special Thanks</a> 
 </p>
@@ -49,6 +50,13 @@ bot will run until you stop it with CTRL + C / CMD + C
 ## Deployment
 
 You may host the bot on any server that has python 3 installed
+
+## Libraries
+
+ - pandas
+ - python-telegram-bot
+ - sqlite3
+ - pandas-datareader
 
 ## License
 
