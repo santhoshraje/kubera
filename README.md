@@ -18,7 +18,6 @@
   <a href="#License">License</a> •
   <a href="#special-thanks">Special Thanks</a> 
 </p>
- <p align="center"><img src="https://github.com/santhoshraje/kubera/blob/master/screen.png"></p>
 
  ## Overview
 
