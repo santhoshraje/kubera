@@ -2,6 +2,7 @@
 
 <a href="https://www.python.org/">
   <img src="https://img.shields.io/badge/built%20with-Python3-red.svg" />
+  <img src="  https://img.shields.io/github/v/release/santhoshraje/kubera" />
 </a>
 
 Kubera is a telegram bot that is designed to simplify the lives of securities traders. Only SGX securities are supported.
