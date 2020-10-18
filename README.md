@@ -10,6 +10,9 @@
 <img src="https://img.shields.io/badge/license-MIT-orange" />
 </p>
 
+<p align="center">
+  <a href="#Overview">Overview</a> •
+</p>
 
  ## Overview
 
