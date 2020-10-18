@@ -6,6 +6,7 @@
 <img src="https://img.shields.io/github/v/release/santhoshraje/kubera" />
 <img src="https://img.shields.io/badge/telegram-%40kubera__bot-blue" />
 <img src="https://img.shields.io/github/last-commit/santhoshraje/kubera/master" />
+<img src="https://img.shields.io/github/release-date/santhoshraje/kubera" />
 <img src="https://img.shields.io/badge/license-MIT-orange" />
 </p>
 
