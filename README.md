@@ -1,4 +1,5 @@
 <p align="center"><img src="https://github.com/santhoshraje/kubera/blob/master/logo.png"></p>
+<h4 align="center">Smart personal assistant for retail stock traders</h4>
 
 <p align="center">
 <img src="https://img.shields.io/badge/built%20with-Python3-red.svg" />
@@ -8,7 +9,7 @@
 <img src="https://img.shields.io/badge/license-MIT-orange" />
 </p>
 
-Kubera is a telegram bot that is designed to simplify the lives of securities traders. Only SGX securities are supported.
+
 
 Features: 
 
