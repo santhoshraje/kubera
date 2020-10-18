@@ -10,9 +10,9 @@
 </p>
 
 
+ ## Overview
 
 Features: 
-
  - Upcoming dividends from SGX listed companies
  - Dividend payout summary over the last 5 years for any SGX listed company
  - Dividend calculator. Calculate by number of shares or amount spent.
