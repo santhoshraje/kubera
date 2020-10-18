@@ -16,10 +16,6 @@
   <a href="#Deployment">Deployment</a> •
   <a href="#License">License</a> •
   <a href="#special-thanks">Special Thanks</a> 
-
-
-  Usage
-
 </p>
 
  ## Overview
