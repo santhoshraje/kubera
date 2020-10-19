@@ -5,7 +5,7 @@ from Controllers.send_update import SendUpdate
 from Utils.logging import get_logger as log
 # controllers
 from Controllers.main_menu import MainMenu
-# from Controllers.dividend_calculator import DividendCalculator
+from Controllers.dividend_calculator import DividendCalculator
 from Controllers.dividend_summary import DividendSummary
 from Controllers.upcoming_dividends import UpcomingDividends
 from Controllers.feedback_button import FeedbackButton
@@ -37,11 +37,11 @@ class Bot:
         self.dp = self.updater.dispatcher
         # error handling
         self.dp.add_error_handler(self.error)
-        # controllers
+        # controllers (order of adding matters)
         MainMenu(self.dp)
-        # DividendCalculator(self.dp)
-        DividendSummary(self.dp)
         UpcomingDividends(self.dp)
+        DividendSummary(self.dp)
+        DividendCalculator(self.dp)
         FeedbackButton(self.dp)
         CancelButton(self.dp)
         SendUpdate(self.dp)
