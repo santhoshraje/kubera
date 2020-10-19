@@ -52,8 +52,7 @@ class DividendCalculator:
         )
         self.__dp.add_handler(dc_handler)
 
-    @staticmethod
-    def show_options(update, context):
+    def show_options(self, update, context):
         user = update.effective_user
         log().info("User %s pressed the dividend calculator button.", user.first_name)
         # answer query
@@ -61,9 +60,9 @@ class DividendCalculator:
         query.answer()
         # new keyboard
         keyboard = [
-            [InlineKeyboardButton("🔸 Calculate by amount",
+            [InlineKeyboardButton("Calculate by amount",
                                   callback_data=str(DIVIDENDCALCAMT))],
-            [InlineKeyboardButton("🔸 Calculate by shares",
+            [InlineKeyboardButton("Calculate by shares",
                                   callback_data=str(DIVIDENDCALCSHARES))]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
@@ -147,8 +146,7 @@ class DividendCalculator:
 
         return ConversationHandler.END
 
-    @staticmethod
-    def get_ticker_amt(update, context):
+    def get_ticker_amt(self, update, context):
         user = update.effective_user
         log().info("User %s wants to calculate using amount.", user.first_name)
         query = update.callback_query
@@ -157,8 +155,7 @@ class DividendCalculator:
             text="Enter ticker symbol (e.g D05)")
         return DIVIDENDCALCAMTSTATE
 
-    @staticmethod
-    def get_ticker_shares(update, context):
+    def get_ticker_shares(self, update, context):
         user = update.effective_user
         log().info("User %s wants to calculate using shares.", user.first_name)
         query = update.callback_query
