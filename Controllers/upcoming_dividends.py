@@ -23,7 +23,7 @@ class UpcomingDividends:
             states={
                 SHOWOPTIONS: [
                     CallbackQueryHandler(self.show_options, pattern='^' + str(YES) + '$'),
-                    CallbackQueryHandler(self.show_options, pattern='^' + str(BACKTOMENU) + '$'),
+                    # CallbackQueryHandler(self.show_options, pattern='^' + str(BACKTOMENU) + '$'),
                 ],
                 OPTIONS: [
                     CallbackQueryHandler(self.thirty_days, pattern='^' + str(THIRTY) + '$'),
