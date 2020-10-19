@@ -60,14 +60,14 @@ class Share:
             time.sleep(10)
             self.__data()
 
-
     def __name(self):
         # if ticker data is unavailable
         if self.is_valid is False:
             return 'unavailable'
 
         try:
-            return self.data['shortName'].to_string(index=False)
+            return re.sub(r'\W+', '', self.data['shortName'].to_string(index=False))
+
         except KeyError:
             return 'unavailable'
 
