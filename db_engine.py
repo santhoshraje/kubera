@@ -83,6 +83,11 @@ class DBEngine:
             self.conn.commit()
             return columns
 
+        def clear_table(self, table):
+            stmt = 'DELETE FROM ' + table
+            self.conn.execute(stmt)
+            self.conn.commit()
+
     def __init__(self, dbname="kubera.sqlite"):
         if not DBEngine.__instance:
             DBEngine.instance = DBEngine.__DBEngine(dbname)
