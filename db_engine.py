@@ -13,7 +13,7 @@ class DBEngine:
             try:
                 self.conn = sqlite3.connect(dbname)
                 # user table
-                self.create_table('users', 'id integer PRIMARY KEY, username text, first text, last text, persona text')
+                self.create_table('users', 'id integer PRIMARY KEY, username text, first text, last text')
                 # stocks table
                 self.create_table('stocks', 'name text, ticker text, volume float, change float')
                 # upcoming dividends table
