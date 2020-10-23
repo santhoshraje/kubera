@@ -10,6 +10,7 @@ from telegram.ext import MessageHandler
 
 GETFEEDBACK = range(1)
 
+
 class FeedbackButton:
     def __init__(self, dispatcher):
         self.__dp = dispatcher

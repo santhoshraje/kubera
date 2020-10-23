@@ -19,8 +19,7 @@ class CancelButton:
         )
         self.__dp.add_handler(cancel_handler)
 
-    @staticmethod
-    def __end_chat(update, context):
+    def __end_chat(self, update, context):
         user = update.effective_user
         query = update.callback_query
         query.answer()
