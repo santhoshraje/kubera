@@ -59,6 +59,8 @@ class UpcomingDividends:
                                   callback_data=str(SIXTY))],
             [InlineKeyboardButton("Next 90 days",
                                   callback_data=str(NINETY))],
+            [InlineKeyboardButton("Show all",
+                                  callback_data=str(NINETY))],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         query.edit_message_text(text="What time period would you like to see?", reply_markup=reply_markup)
