@@ -26,7 +26,6 @@ def post_market_analysis(context: telegram.ext.CallbackContext):
         # add change % to database
         db.update_item('stocks', 'change', share.change, 'ticker', ticker[0])
         time.sleep(1)
-
     # get top 5 results from database sorted
     volume = db.custom_command('select name, volume from stocks order by volume desc limit 5')
     gainers = db.custom_command('select name, change from stocks order by change desc limit 5')
@@ -46,19 +45,19 @@ def post_market_analysis(context: telegram.ext.CallbackContext):
     s += '<b>Highest volumes:</b>\n'
 
     for idx, row in enumerate(volume):
-        s += '‣ ' + row[0] + ' [' + str(millify(row[1])) + ']\n'
+        s += '‣ ' + row[0] + ' (' + str(millify(row[1])) + ')\n'
 
     s += '\n'
     s += '<b>Top gainers:</b>\n'
 
     for idx, row in enumerate(gainers):
-        s += '‣ ' + row[0] + ' [+' + str(row[1]) + ']' + '\n'
+        s += '‣ ' + row[0] + ' (+' + str(row[1]) + ')' + '\n'
 
     s += '\n'
     s += '<b>Top losers:</b>\n'
 
     for idx, row in enumerate(losers):
-        s += '‣ ' + row[0] + ' [' + str(row[1]) + ']' + '\n'
+        s += '‣ ' + row[0] + ' (' + str(row[1]) + ')' + '\n'
 
     total_users = 0
     # send message to all users
