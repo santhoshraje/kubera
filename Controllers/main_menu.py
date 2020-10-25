@@ -30,20 +30,21 @@ class MainMenu:
         DBEngine().update_item('users', 'first', user.first_name, 'id', user.id)
         DBEngine().update_item('users', 'last', user.last_name, 'id', user.id)
         DBEngine().update_item('users', 'username', user.username, 'id', user.id)
-        menu_text = "Hello " + user.first_name + ". Tap on any of the options below to learn more. " \
-                                                 "How can I help you today?"
+        menu_text = "Hello " + user.first_name + ". Let's make some money. How can I help you today? \n\nTap on any " \
+                                                 "of the options below to learn more. Use /start to bring up this " \
+                                                 "menu at any time. "
 
         keyboard = [
-            [InlineKeyboardButton("Upcoming Dividends",
+            [InlineKeyboardButton("Show me upcoming dividends",
                                   callback_data=str(states.DIVIDENDUP))],
-            [InlineKeyboardButton("Dividend Summary",
+            [InlineKeyboardButton("Show me past dividends",
                                   callback_data=str(states.DIVIDENDINFO))],
-            [InlineKeyboardButton("Dividend Estimation",
+            [InlineKeyboardButton("Estimate my dividends for 2020",
                                   callback_data=str(states.DIVIDENDCALC))],
-            [InlineKeyboardButton("️Send Feedback",
-                                  callback_data=str(states.FEEDBACK))]
-            # [InlineKeyboardButton("Cancel",
-            #                       callback_data=str(states.MENUCANCEL))]
+            [InlineKeyboardButton("️Send feedback",
+                                  callback_data=str(states.FEEDBACK))],
+            [InlineKeyboardButton("About this bot",
+                                  callback_data=str(states.MENUCANCEL))]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         # Send message with text and appended InlineKeyboard
