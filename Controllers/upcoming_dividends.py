@@ -7,7 +7,7 @@ from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 from datetime import datetime, timedelta
 
-YES, NO, OPTIONS, THIRTY, SIXTY, NINETY, SHOWOPTIONS, BACKTOMENU = range(8)
+YES, NO, OPTIONS, THIRTY, SIXTY, NINETY, SHOWOPTIONS, BACKTOMENU, ALL = range(9)
 
 
 class UpcomingDividends:
@@ -29,6 +29,7 @@ class UpcomingDividends:
                     CallbackQueryHandler(self.thirty_days, pattern='^' + str(THIRTY) + '$'),
                     CallbackQueryHandler(self.sixty_days, pattern='^' + str(SIXTY) + '$'),
                     CallbackQueryHandler(self.ninety_days, pattern='^' + str(NINETY) + '$'),
+                    CallbackQueryHandler(self.show_all, pattern='^' + str(ALL) + '$')
                 ],
 
             },
@@ -60,7 +61,7 @@ class UpcomingDividends:
             [InlineKeyboardButton("Next 90 days",
                                   callback_data=str(NINETY))],
             [InlineKeyboardButton("Show all",
-                                  callback_data=str(NINETY))],
+                                  callback_data=str(ALL))],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         query.edit_message_text(text="What time period would you like to see?", reply_markup=reply_markup)
@@ -158,6 +159,36 @@ class UpcomingDividends:
                                   callback_data=str(YES))],
             # [InlineKeyboardButton("Back to main menu",
             #                       callback_data=str(BACKTOMENU))],
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
+        for message in message_array:
+            query.edit_message_text(text=message, parse_mode='html', silent=True, reply_markup=reply_markup)
+        return SHOWOPTIONS
+
+    def show_all(self, update, context):
+        query = update.callback_query
+        query.answer()
+        rows = self.__db.get_items('dividends', '*')
+        tmp = ''
+        period = datetime.now().date() + timedelta(days=90)
+        max_message_size = 4096
+        message_array = []
+        for row in rows:
+            n = '<b>' + row[0].lstrip() + ' (' + row[1] + ')</b>\n‣ Market Cap: ' + row[2] \
+                + '\n‣ Price: ' + row[3] + \
+                '\n‣ Amount: ' + row[4] + '\n‣ Yield: ' + row[5] + '\n‣ Date: ' + row[6] + '\n\n'
+            if len(tmp) + len(n) <= max_message_size:
+                tmp += n
+            else:
+                message_array.append(tmp)
+                tmp = ''
+        if not message_array:
+            message_array.append(tmp)
+
+        keyboard = [
+            [InlineKeyboardButton("Back",
+                                  callback_data=str(YES))],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
 
