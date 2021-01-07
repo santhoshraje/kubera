@@ -7,7 +7,7 @@ cryptography==3.2
 decorator==4.4.2
 html5lib==1.1
 idna==2.10
-lxml==4.5.1
+lxml==4.6.2
 millify==0.1.1
 numpy==1.19.0
 pandas==1.0.5
