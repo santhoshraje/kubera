@@ -4,7 +4,7 @@ import os
 # get abs path
 folder = os.path.dirname(os.path.abspath(__file__))
 # get file path
-file = os.path.join(folder, 'dev_config.ini')
+file = os.path.join(folder, 'config.ini')
 # read api key file
 config = ConfigParser()
 config.read(file)
