@@ -1,10 +1,10 @@
 import pandas as pd
 import requests
-from Kubera.share import Share
+from Kubera.Model.share import Share
 import pickle
 import numpy as np
 
-from config import BotConfig
+from Kubera.Bot.config import BotConfig
 
 
 def main():

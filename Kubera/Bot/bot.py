@@ -1,22 +1,22 @@
 # telegram api
 from telegram.ext import Updater
 # utils
-from Controllers.send_update import SendUpdate
-from Utils.logging import get_logger as log
+from Kubera.Controllers.send_update import SendUpdate
+from Kubera.Utils.logging import get_logger as log
 # controllers
-from Controllers.main_menu import MainMenu
+from Kubera.Controllers.main_menu import MainMenu
 # from Controllers.dividend_calculator import DividendCalculator
-from Controllers.dividend_summary import DividendSummary
-from Controllers.upcoming_dividends import UpcomingDividends
-from Controllers.feedback_button import FeedbackButton
-from Controllers.cancel_button import CancelButton
+from Kubera.Controllers.dividend_summary import DividendSummary
+from Kubera.Controllers.upcoming_dividends import UpcomingDividends
+from Kubera.Controllers.feedback_button import FeedbackButton
+from Kubera.Controllers.cancel_button import CancelButton
 #jobs
-from Jobs.get_upcoming_dividends import get_upcoming_dividends
-from Jobs.post_market_analysis import post_market_analysis
+from Kubera.Jobs.get_upcoming_dividends import get_upcoming_dividends
+from Kubera.Jobs.post_market_analysis import post_market_analysis
 #config
-from config import BotConfig
+from Kubera.Bot.config import BotConfig
 #db
-from db_engine import DBEngine
+from Kubera.Model.db import DBEngine
 # tools
 import datetime
 

@@ -3,12 +3,12 @@ from telegram.ext import CommandHandler
 from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 
-import Controllers.global_states as states
+import Kubera.Controllers.global_states as states
 # utilities
-from Utils.logging import get_logger as log
+from Kubera.Utils.logging import get_logger as log
 # configuration
-from config import BotConfig
-from db_engine import DBEngine
+from Kubera.Bot.config import BotConfig
+from Kubera.Model.db import DBEngine
 
 
 class MainMenu:

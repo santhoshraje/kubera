@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from bot import Bot
+from Kubera.Bot.bot import Bot
 
 if __name__ == '__main__':
     Bot()

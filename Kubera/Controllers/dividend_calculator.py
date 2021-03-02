@@ -6,11 +6,11 @@ from telegram.ext import CallbackQueryHandler
 from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 
-import Controllers.global_states as states
+import Kubera.Controllers.global_states as states
 
-from Kubera.share import Share
+from Kubera.Model.share import Share
 
-from Utils.logging import get_logger as log
+from Kubera.Utils.logging import get_logger as log
 
 DIVIDENDCALCAMT, DIVIDENDCALCSHARES, DIVIDENDCALCFIRST, DIVIDENDCALCAMTSTATE, \
 DIVIDENDCALCSHARESSTATE, DIVIDENDCALCAMTSTATEFINAL, DIVIDENDCALCSHARESSTATEFINAL = range(7)

@@ -3,9 +3,9 @@ from telegram.ext import MessageHandler
 from telegram.ext import Filters
 from telegram.ext import CallbackQueryHandler
 
-from Kubera.share import Share
-import Controllers.global_states as states
-from Utils.logging import get_logger as log
+from Kubera.Model.share import Share
+import Kubera.Controllers.global_states as states
+from Kubera.Utils.logging import get_logger as log
 import pandas as pd
 import datetime
 

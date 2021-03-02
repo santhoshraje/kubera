@@ -2,12 +2,12 @@ import time
 
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters
 
-from config import BotConfig
-from db_engine import DBEngine
+from Kubera.Bot.config import BotConfig
+from Kubera.Model.db import DBEngine
 
 from telegram.error import TelegramError
 
-from Utils.logging import get_logger as log
+from Kubera.Utils.logging import get_logger as log
 
 AUTH, MSG, CONFIRM, RESPONSE = range(4)
 

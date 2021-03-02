@@ -1,7 +1,5 @@
-# singleton pattern
-
 import sqlite3
-from Utils.logging import get_logger as log
+from Kubera.Utils.logging import get_logger as log
 
 
 class DBEngine:

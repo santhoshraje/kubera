@@ -1,9 +1,9 @@
 from telegram.ext import ConversationHandler
 from telegram.ext import CallbackQueryHandler
 
-import Controllers.global_states as states
+import Kubera.Controllers.global_states as states
 
-from Utils.logging import get_logger as log
+from Kubera.Utils.logging import get_logger as log
 
 
 class CancelButton:
