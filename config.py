@@ -17,7 +17,7 @@ class BotConfig:
         else:
             self.token = config.get('main', 'prod_api_key')
         # version info
-        self.version = '1.3'
+        self.version = config.get('main', 'version_info')
         # data sources
         self.dividend_url = config.get('main', 'dividend_url')
         self.upcoming_dividends_url = config.get('main', 'upcoming_dividends_url')
