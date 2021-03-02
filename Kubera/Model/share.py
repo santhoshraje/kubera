@@ -3,12 +3,12 @@ import pandas as pd
 from pandas_datareader import data
 from millify import millify
 # utils
-from Utils.get_data import get_data
-from Utils.logging import get_logger as log
+from Kubera.Utils.get_data import get_data
+from Kubera.Utils.logging import get_logger as log
 # config
-from config import BotConfig
+from Kubera.Bot.config import BotConfig
 # Objects
-from Kubera.dividend_summary import DividendSummary as Ds
+from Kubera.Model.dividend_summary import DividendSummary as Ds
 import re
 import time
 

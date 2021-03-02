@@ -1,10 +1,10 @@
 import pandas as pd
 import requests
-from Kubera.share import Share
+from Kubera.Model.share import Share
 import pickle
 import numpy as np
 import telegram.ext
-from config import BotConfig
+from Kubera.Bot.config import BotConfig
 
 
 def get_upcoming_dividends(context: telegram.ext.CallbackContext):

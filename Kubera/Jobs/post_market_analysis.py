@@ -1,11 +1,11 @@
 import telegram.ext
 from telegram import TelegramError
-from db_engine import DBEngine
-from Kubera.share import Share
+from Kubera.Model.db import DBEngine
+from Kubera.Model.share import Share
 from millify import millify
 import time
 from datetime import datetime
-from Utils.logging import get_logger as log
+from Kubera.Utils.logging import get_logger as log
 
 
 def post_market_analysis(context: telegram.ext.CallbackContext):
