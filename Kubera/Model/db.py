@@ -1,5 +1,3 @@
-# singleton pattern
-
 import sqlite3
 from Utils.logging import get_logger as log
 
