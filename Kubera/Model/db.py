@@ -10,8 +10,10 @@ class DBEngine:
             self.dbname = dbname
             try:
                 self.conn = sqlite3.connect(dbname)
-                self.create_table('users', 'id integer PRIMARY KEY, username text, first text, last text, persona text')
+                self.create_table('users', 'id integer PRIMARY KEY, username text, first text, last text')
                 self.create_table('stocks', 'name text, ticker text, volume float, change float')
+                self.create_table('news', 'name text, hash integer')
+                self.create_table('usernews', 'name text, id integer')
             except sqlite3.Error as e:
                 log().critical('local database initialisation error: "%s"', e)
                 self.conn = None
@@ -76,7 +78,7 @@ class DBEngine:
             self.conn.commit()
             return columns
 
-    def __init__(self, dbname="kubera.sqlite"):
+    def __init__(self, dbname="db.sqlite"):
         if not DBEngine.__instance:
             DBEngine.instance = DBEngine.__DBEngine(dbname)
         else:

@@ -10,9 +10,11 @@ from Kubera.Controllers.dividend_summary import DividendSummary
 from Kubera.Controllers.upcoming_dividends import UpcomingDividends
 from Kubera.Controllers.feedback_button import FeedbackButton
 from Kubera.Controllers.cancel_button import CancelButton
+from Kubera.Controllers.track_news import TrackNews
 #jobs
 from Kubera.Jobs.get_upcoming_dividends import get_upcoming_dividends
 from Kubera.Jobs.post_market_analysis import post_market_analysis
+from Kubera.Model.news_tracker import NewsTracker as nt
 #config
 from Kubera.Bot.config import BotConfig
 #db
@@ -45,10 +47,13 @@ class Bot:
         FeedbackButton(self.dp)
         CancelButton(self.dp)
         SendUpdate(self.dp)
+        TrackNews(self.dp)
         # jobs
         self.job_queue.run_repeating(get_upcoming_dividends, interval=3600, first=0)
         # 5:01 PM singapore time (after market close)
         self.job_queue.run_daily(post_market_analysis, datetime.time(hour=9, minute=1), (0, 1, 2, 3, 4))
+        self.job_queue.run_repeating(nt().update_tracked_news, interval=30, first=0)
+
         # start bot
         self.updater.start_polling()
         self.updater.idle()
