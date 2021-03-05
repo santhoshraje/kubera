@@ -3,13 +3,11 @@ from GoogleNews import GoogleNews
 from telegram import TelegramError
 from Kubera.Model.db import DBEngine
 import time
+import hashlib
 
 
 class NewsTracker:
     def __init__(self):
-        self.latest_hash = None
-        self.latest_article = None
-        self.new_article_available = False
         self.gn = GoogleNews()
         self.gn.set_lang('en')
         self.gn.set_period('2d')
@@ -25,7 +23,7 @@ class NewsTracker:
             self.gn.get_news(name, True)
             result = self.gn.result()[0]
             # hash the title and compare it with db
-            new_hash = hash(result['title'])
+            new_hash = hashlib.md5(result['title'].encode()).hexdigest()
             # if different, update db and send message
             if new_hash != hash_value:
                 DBEngine().update_item('news', 'hash', new_hash, 'name', name)
@@ -35,14 +33,16 @@ class NewsTracker:
                     check_name = user[0]
                     id = user[1]
                     # if the current search matches the users saved searches
-                    if name == check_name:
+                    if check_name == name:
                         try:
-                            context.bot.send_message(chat_id=id, text=result['title'], parse_mode='HTML')
+                            caption = '<b>' + result['title'] + '</b> -' + result['date'] + '\n\n' + result['desc'] + '\n\n' + 'Source: <a href="' + result['link'] + '">' + result['site'] + '</a>'
+                            context.bot.send_photo(chat_id=id, photo=result['link'], caption=caption, parse_mode='HTML')
                             time.sleep(1)
                         except TelegramError:
                             DBEngine().delete_item('users', 'id', user[0])
                             continue
             time.sleep(10)
+            self.gn.clear()
 
     def track(self, name, id):
         DBEngine().add_item('news', 'name', name)
@@ -50,4 +50,3 @@ class NewsTracker:
         DBEngine().add_item('usernews', 'name', name)
         DBEngine().update_item('usernews', 'id', id, 'name', name)
 
-# NewsTracker().update_tracked_news()
