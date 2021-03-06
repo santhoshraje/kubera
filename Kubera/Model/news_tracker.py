@@ -20,8 +20,8 @@ class NewsTracker:
             name = row[0]
             hash_value = row[1]
             # get latest article for name
-            self.gn.get_news(name, True)
-            result = self.gn.result()[0]
+            self.gn.get_news(name)
+            result = self.gn.result(True)[0]
             # hash the title and compare it with db
             new_hash = hashlib.md5(result['title'].encode()).hexdigest()
             # if different, update db and send message
@@ -35,7 +35,7 @@ class NewsTracker:
                     # if the current search matches the users saved searches
                     if check_name == name:
                         try:
-                            caption = '<b>' + result['title'] + '</b> -' + result['date'] + '\n\n' + result['desc'] + '\n\n' + 'Source: <a href="' + result['link'] + '">' + result['site'] + '</a>'
+                            caption = '<b>' + result['title'] + '</b> - ' + result['date'] + '\n\n' + result['desc'] + '\n\n' + 'Source: <a href="' + result['link'] + '">' + result['site'] + '</a>'
                             context.bot.send_photo(chat_id=id, photo=result['link'], caption=caption, parse_mode='HTML')
                             time.sleep(1)
                         except TelegramError:
