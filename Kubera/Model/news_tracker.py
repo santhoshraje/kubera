@@ -46,7 +46,6 @@ class NewsTracker:
 
     def track(self, name, id):
         DBEngine().add_item('news', 'name', name)
-        # DBEngine().update_item('news', 'hash', 0, 'name', name)
         DBEngine().add_item('usernews', 'name', name)
         DBEngine().update_item('usernews', 'id', id, 'name', name)
 
