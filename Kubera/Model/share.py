@@ -3,12 +3,12 @@ import pandas as pd
 from pandas_datareader import data
 from millify import millify
 # utils
-from Kubera.Utils.get_data import get_data
-from Kubera.Utils.logging import get_logger as log
+from Utils.get_data import get_data
+from Utils.logging import get_logger as log
 # config
-from Kubera.Bot.config import BotConfig
+from Bot.config import BotConfig
 # Objects
-from Kubera.Model.dividend_summary import DividendSummary as Ds
+from Model.dividend_summary import DividendSummary as Ds
 import re
 import time
 
@@ -38,6 +38,8 @@ class Share:
         self.open = self.__open()
         self.market = self.__market()
         self.type = self.__type()
+        self.low = self.__low()
+        self.high = self.__high()
         # moving averages
         self.fifty_day_ma = self.__fiftydayma()
         self.two_hundred_day_ma = self.__twohundereddayma()
@@ -45,6 +47,8 @@ class Share:
         self.percent_changed = self.__percent_changed()
         # change from open
         self.change = self.__change()
+        self.previous_close = self.__previous_close()
+        self.day_range = self.__day_range()
 
     def __data(self):
         try:
@@ -59,7 +63,6 @@ class Share:
             print(str(e))
             time.sleep(10)
             self.__data()
-
 
     def __name(self):
         # if ticker data is unavailable
@@ -98,7 +101,7 @@ class Share:
             return 'unavailable'
 
         try:
-            return float(self.data['regularMarketVolume'].to_string(index=False))
+            return millify(float(self.data['regularMarketVolume'].to_string(index=False)))
         except KeyError:
             return 'unavailable'
 
@@ -118,7 +121,8 @@ class Share:
             return 'unavailable'
 
         try:
-            return float(self.data['fiftyDayAverage'].to_string(index=False))
+            ma = float(self.data['fiftyDayAverage'].to_string(index=False))
+            return float("{:.2f}".format(ma))
         except KeyError:
             return 'unavailable'
 
@@ -139,6 +143,46 @@ class Share:
 
         try:
             return float(self.data['regularMarketOpen'].to_string(index=False))
+        except KeyError:
+            return 'unavailable'
+
+    def __day_range(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            return self.data['regularMarketDayRange'].to_string(index=False)
+        except KeyError:
+            return 'unavailable'
+
+    def __high(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            return float(self.data['regularMarketDayHigh'].to_string(index=False))
+        except KeyError:
+            return 'unavailable'
+
+    def __low(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            return float(self.data['regularMarketDayLow'].to_string(index=False))
+        except KeyError:
+            return 'unavailable'
+
+    def __previous_close(self):
+        # if ticker data is unavailable
+        if self.is_valid is False:
+            return 'unavailable'
+
+        try:
+            return float(self.data['regularMarketPreviousClose'].to_string(index=False))
         except KeyError:
             return 'unavailable'
 
@@ -188,10 +232,7 @@ class Share:
         df = get_data(BotConfig().dividend_url, self.ticker)
         a = []
 
-        if df is None:
-            return None
-
-        if end is 0:
+        if end == 0:
             try:
                 amount = df.loc[df.Year == start, 'Amount'].values.tolist()
                 ex_date = df.loc[df.Year == start, 'ExDate'].values.tolist()
@@ -217,6 +258,6 @@ class Share:
         return a
 
     def __str__(self):
-        return 'Name:' + self.name + ' (' + self.ticker + ')\nLatest price: SGD' + str(
+        return 'Name:' + self.name + ' (' + self.ticker + ')\nLatest price: ' + str(
             self.price) + '\nMarket Cap: ' + str(
-            self.market_cap) + '\nBook Value Per Share (MRQ): SGD' + self.book_value
+            self.market_cap) + '\nBook Value Per Share (MRQ): SGD' + str(self.book_value)
