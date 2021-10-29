@@ -1,5 +1,5 @@
 import sqlite3
-from Kubera.Utils.logging import get_logger as log
+from Utils.logging import get_logger as log
 
 
 class DBEngine:
@@ -10,8 +10,8 @@ class DBEngine:
             self.dbname = dbname
             try:
                 self.conn = sqlite3.connect(dbname)
-                self.create_table('users', 'id integer PRIMARY KEY, username text, first text, last text, persona text')
-                self.create_table('stocks', 'name text, ticker text, volume float, change float')
+                self.cursor = self.conn.cursor()
+                self.create_table('watchlist', 'id integer, ticker text')
             except sqlite3.Error as e:
                 log().critical('local database initialisation error: "%s"', e)
                 self.conn = None
@@ -49,6 +49,13 @@ class DBEngine:
             self.conn.commit()
             return rows
 
+        def get_distinct_items(self, table, column, item):
+            stmt = self.conn.execute("SELECT ticker FROM " + table + " WHERE " + column + " = ?")
+            args = (item,)
+            rows = self.conn.execute(stmt, args)
+            self.conn.commit()
+            return rows
+
         # update
         def update_item(self, table, first, second, third, fourth):
             stmt = "UPDATE " + table + " SET " + first + " = ? WHERE " + third + " = ?"
@@ -69,6 +76,11 @@ class DBEngine:
             self.conn.commit()
             return rows
 
+        def count(self, command):
+            self.cursor.execute(command)
+            results = self.cursor.fetchone()
+            return results[0]
+
         # show all the columns in a table
         def show_all_columns(self, table):
             stmt = "PRAGMA table_info(" + table + ")"
@@ -76,7 +88,7 @@ class DBEngine:
             self.conn.commit()
             return columns
 
-    def __init__(self, dbname="kubera.sqlite"):
+    def __init__(self, dbname="sqlite"):
         if not DBEngine.__instance:
             DBEngine.instance = DBEngine.__DBEngine(dbname)
         else:
