@@ -1,4 +1,4 @@
-from Kubera.Model.db import DBEngine
+from Model.db import DBEngine
 
 
 def main():

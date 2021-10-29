@@ -1,4 +1,4 @@
-from Kubera.Model.share import Share
+from Model.share import Share
 import pandas as pd
 import pandas_datareader as pdr
 import datetime
