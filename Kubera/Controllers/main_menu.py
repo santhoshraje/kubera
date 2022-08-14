@@ -43,7 +43,7 @@ class MainMenu:
         keyboard = [
             [InlineKeyboardButton("Update my watchlist",
                                   callback_data=str(states.UPDATEWATCHLIST))],
-            [InlineKeyboardButton("Dividend history",
+            [InlineKeyboardButton("View dividend history",
                                   callback_data=str(states.DIVIDENDINFO))],
             # [InlineKeyboardButton("Bot settings",
             #                       callback_data=str(states.SETTINGS))],
