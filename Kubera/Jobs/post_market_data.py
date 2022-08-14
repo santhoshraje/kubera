@@ -10,7 +10,7 @@ from Utils.logging import get_logger as log
 
 def post_market_data(context: telegram.ext.CallbackContext):
     # connect to database
-    log().info('post market data job started')
+    log().info('🔵 Running post_market_data job')
     total_users = 0
     tickers = []
     user_id = 0
@@ -28,11 +28,9 @@ def post_market_data(context: telegram.ext.CallbackContext):
         # print(tickers)
         for ticker in tickers:
             share = Share(ticker)
-            s += '<b>' + share.name + ' (' + share.ticker + ')</b>\nOpen: ' + str(share.open) + \
-                 '\nLow: ' + str(share.low) + '\nHigh: ' + str(share.high) + \
-                 '\nClose: ' + str(share.price) + '\nPrev Close: ' + \
-                 str(share.previous_close) + '\n50MA: ' + str(share.fifty_day_ma) + \
-                 '\nVolume: ' + str(share.volume)+'\n\n'
+            s += '<b>' + share.name + ' (' + share.ticker + ')</b>\nPrevious close: ' + str(share.previous_close) + \
+                 '\nOpen: ' + str(share.open) + '\nClose: ' + str(share.price) + \
+                 '\nLow: ' + str(share.low) + '\nHigh: ' + str(share.high) + '\nVolume: ' + str(share.volume)+'\n\n'
         try:
             context.bot.send_message(chat_id=user_id, text=s, parse_mode='HTML')
             total_users += 1
