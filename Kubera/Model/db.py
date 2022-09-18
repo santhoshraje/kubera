@@ -14,7 +14,7 @@ class DBEngine:
                 # create users table
                 # self.create_table('users', 'id INTEGER PRIMARY KEY')
                 self.create_table('watchlist', 'id integer, ticker text')
-                self.create_table('dividends', 'ticker text, amount text, date text')
+                self.create_table('dividends', 'ticker text, amount text, payout_date text')
             except sqlite3.Error as e:
                 log().critical('local database initialisation error: "%s"', e)
                 self.conn = None
