@@ -5,7 +5,7 @@ from Utils.logging import get_logger as log
 # controllers
 from Controllers.main_menu import MainMenu
 from Controllers.about import About
-from Controllers.add_watchlist_button import UpdateWatchlist
+from Controllers.update_watchlist_button import UpdateWatchlist
 from Controllers.dividend_summary import DividendSummary
 # jobs
 from Jobs.post_market_data import post_market_data
@@ -36,14 +36,15 @@ class Bot:
         self.dp.add_error_handler(self.error)
         # controllers
         MainMenu(self.dp)
-        DividendSummary(self.dp)
         UpdateWatchlist(self.dp)
+        # DividendSummary(self.dp)
         About(self.dp)
         # jobs
         # 5:15 PM singapore time
-        self.job_queue.run_daily(post_market_data, datetime.time(hour=9, minute=15), (0, 1, 2, 3, 4))
+        # self.job_queue.run_daily(post_market_data, datetime.time(hour=9, minute=15), (0, 1, 2, 3, 4))
         # 9:00 AM singapore time
         self.job_queue.run_daily(check_dividend, datetime.time(hour=1, minute=15), (0, 1, 2, 3, 4))
+        # self.job_queue.run_once(check_dividend, 0)
 
         # start bot
         self.updater.start_polling()
