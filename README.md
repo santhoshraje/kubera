@@ -1,5 +1,4 @@
  <p align="center"><img src="https://github.com/santhoshraje/kubera/blob/master/logo.png"></p>
-<h1></h1>
 <h4 align="center">A smart personal assistant for retail stock traders</h4>
 
 <p align="center">
@@ -76,7 +75,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
  - <a href ="https://github.com/mmdaz/mvc_model_bot_developing">mmdaz</a> - Basic structure for MVC bot architecture
  - <a href ="https://github.com/xlanor/SIM-UoW-Timetable-bot">xlanor</a> - Great example of a telegram bot with MVC architecture
- - <a href ="https://www.freelogodesign.org/">FreeLogoDesign.org</a> - Cool logo for my project
+ - <a href ="https://www.freelogodesign.org/">vecteezy.com</a> - Cool logo
 
 
 
