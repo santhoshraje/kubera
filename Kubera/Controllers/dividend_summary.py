@@ -30,8 +30,7 @@ class DividendSummary:
         )
         self.__dp.add_handler(ds_handler)
 
-    @staticmethod
-    def get_ticker(update, context):
+    def get_ticker(self,update, context):
         user = update.effective_user
         log().info("User %s pressed the dividend summary button.", user.first_name)
         query = update.callback_query
@@ -40,8 +39,7 @@ class DividendSummary:
             text="Enter ticker symbol (e.g D05)")
         return GETSUMMARY
 
-    @staticmethod
-    def get_dividend_summary(update, context):
+    def get_dividend_summary(self, update, context):
         ticker = update.message.text
         user = update.effective_user
         log().info("User %s entered ticker value %s.", user.first_name, ticker)

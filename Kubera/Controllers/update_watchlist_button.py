@@ -6,6 +6,7 @@ from Model.db import DBEngine
 from Model.share import Share
 
 
+
 ADD, REMOVE, SELECTOPTION, ADDSHARE, REMOVESHARE, SELECTSHARE = range(6)
 
 
@@ -41,14 +42,14 @@ class UpdateWatchlist:
         query = update.callback_query
         query.answer()
         keyboard = [
-            [InlineKeyboardButton("Add",
+            [InlineKeyboardButton("Add to your watchlist",
                                   callback_data=str(ADD))],
-            [InlineKeyboardButton("Remove",
+            [InlineKeyboardButton("Remove from your watchlist",
                                   callback_data=str(REMOVE))]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         query.edit_message_text(
-            text="Would you like to add or remove shares from your watchlist?",
+            text="Ok, let's update your watchlist!",
             reply_markup=reply_markup
         )
         return SELECTOPTION
@@ -95,6 +96,16 @@ class UpdateWatchlist:
 
         update.message.reply_text("Your watchlist has been updated.\n\n<b>Current watchlist:</b>\n" + s,
                                   parse_mode='HTML')
+
+        # check if the stock is in the database of upcoming dividends
+        s = DBEngine().custom_command('SELECT * FROM dividends')
+        for t in s:
+            if t[0] == share.ticker:
+                s = 'Dividend announced for <b>' + share.name + '</b>\n\nAmount: ' + str(t[1]) + '\nPayment on: ' + str(t[2])
+                update.message.reply_text(s, parse_mode='HTML')
+                break
+
+
         return ConversationHandler.END
 
     def __remove_share(self, update, context):
