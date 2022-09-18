@@ -20,7 +20,7 @@ import datetime
 
 class Bot:
     def __init__(self):
-        self.config = BotConfig(dev=True)
+        self.config = BotConfig()
         log().info('🟢 KUBERA version ' + self.config.version + ' started')
         # db engine
         DBEngine()
