@@ -43,8 +43,8 @@ class MainMenu:
         keyboard = [
             [InlineKeyboardButton("Update my watchlist",
                                   callback_data=str(states.UPDATEWATCHLIST))],
-            [InlineKeyboardButton("View dividend history",
-                                  callback_data=str(states.DIVIDENDINFO))],
+            # [InlineKeyboardButton("View dividend history",
+            #                       callback_data=str(states.DIVIDENDINFO))],
             # [InlineKeyboardButton("Bot settings",
             #                       callback_data=str(states.SETTINGS))],
             [InlineKeyboardButton("About this bot",
@@ -56,3 +56,4 @@ class MainMenu:
         # Send message with text and appended InlineKeyboard
         update.message.reply_text(s, reply_markup=reply_markup, parse_mode='HTML')
         # context.bot.send_message(chat_id=, text='hello world')
+

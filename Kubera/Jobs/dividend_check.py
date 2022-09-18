@@ -13,10 +13,10 @@ import pickle
 
 
 def check_dividend(context: telegram.ext.CallbackContext):
-    # connect to database
     log().info('🔵 Running check_dividend job')
-
+    # stores which user has which ticker
     user_ticker_dict = {}
+    # stores ticker payout information
     ticker_payout_dict = {}
 
     url = BotConfig().upcoming_dividends_url
@@ -33,13 +33,12 @@ def check_dividend(context: telegram.ext.CallbackContext):
         if r[0] in tickers:
             tickers.remove(r[0])
 
-    
+    # build a dictionary of which user has which ticker
     for ticker in tickers:
         # check if ticker is in database
         try:
             # select everything from watchlist table
             row = DBEngine().custom_command('SELECT id FROM watchlist where ticker="' + ticker + '"')
-            # build a dictionary of which user has which ticker
             for r in row:
                 if ticker in user_ticker_dict:
                     user_ticker_dict[ticker].append(r[0])
@@ -48,7 +47,6 @@ def check_dividend(context: telegram.ext.CallbackContext):
         # ticker not found. no user has this ticker
         except:
             continue
-
 
     for ticker in user_ticker_dict:
         # get share object
@@ -68,14 +66,14 @@ def check_dividend(context: telegram.ext.CallbackContext):
         # get payout date
         payout_date = pd.to_datetime(str(df.loc[df.Ticker == ticker, 'NextDividend'].values[0])).strftime('%d %B %Y')
         
-        s+= '<b>' + Share(ticker).name + '</b>\n\nAmount:\n'
+        s+= '<b>' + Share(ticker).name + '</b>\n\nAmount:'
         
         for v in ticker_payout_dict[ticker]:
             s+= str(v) + '\n'
             payout_amount += str(v) + '\n'
         s+= '\nPayment on ' + payout_date + '\n\n'
         # add item to database
-        DBEngine().add_item('dividends', ['ticker', 'amount', 'date'], [ticker, payout_amount, payout_date])
+        DBEngine().add_item('dividends', ['ticker', 'amount', 'payout_date'], [ticker, payout_amount, payout_date])
         # send message to each user
         users = user_ticker_dict.get(ticker)
         for user in users:
